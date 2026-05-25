@@ -1,3 +1,6 @@
+import { db } from '../firebase.js';
+import { collection, addDoc } from 'firebase/firestore';
+
 const serviceEl = document.getElementById("calc-service");
 const unitsEl = document.getElementById("calc-units");
 const resultEl = document.getElementById("calc-result");
@@ -91,13 +94,26 @@ if (bookBtn) {
       "Les détails de l'estimateur ont été importés dans le formulaire.",
       false,
     );
+
+    // Save estimate implicitly to Firestore
+    try {
+        addDoc(collection(db, "estimates"), {
+            serviceValue: serviceEl.value,
+            quantityValue: unitsEl.value,
+            deliveryValue: getSelectedDeliveryText(),
+            calculatedTotal: calculatedTotal,
+            timestamp: new Date()
+        });
+    } catch (err) {
+        console.error("[Backend calculation update failed]", err);
+    }
   });
 }
 
 const contactForm = document.getElementById("contact-form");
 const submitBtn = document.getElementById("contact-submit-btn");
 
-contactForm.addEventListener("submit", (event) => {
+contactForm.addEventListener("submit", async (event) => {
   event.preventDefault();
 
   const submitOriginalText = submitBtn.innerHTML;
@@ -117,12 +133,27 @@ contactForm.addEventListener("submit", (event) => {
   const emailBody = encodeURIComponent(
     `Bonjour Atelier Prestige,\n\nJe souhaite soumettre une demande de personnalisation.\n\nNom : ${name}\nEmail : ${email}\nEntreprise / Événement : ${company || "Particulier"}\nService : ${serviceName}\nEstimation : ${calculatedTotal} € HT\n\nDétails du projet :\n${projectDescription}\n\nMerci de me recontacter.`,
   );
+  // Guardar contacto en Firestore
+  try {
+      await addDoc(collection(db, "contacts"), {
+          name, 
+          email, 
+          company, 
+          projectDescription,
+          serviceName,
+          calculatedTotal,
+          timestamp: new Date()
+      });
+  } catch (err) {
+      console.error("[Backend contact save failed]", err);
+  }
+
   const mailUrl = `mailto:contact@atelierprestige.lu?subject=${subject}&body=${emailBody}`;
 
   window.location.href = mailUrl;
   showToast(
-    "Client Email Ouvert",
-    "Votre message a été préparé dans votre application email. Aucune donnée n'est stockée sur ce site.",
+    "Client Email Ouvert & Demande Enregistrée",
+    "Votre message a été préparé et enregistré.",
     false,
   );
 
