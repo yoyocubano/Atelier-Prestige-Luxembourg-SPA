@@ -1,12 +1,47 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /contacts/{document=**} {
-      allow create: if true;
+    function isString(v) {
+      return v is string;
+    }
+
+    function hasOnlyKeys(allowed) {
+      return request.resource.data.keys().hasOnly(allowed);
+    }
+
+    function isEmail(v) {
+      return v.matches('^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$');
+    }
+
+    function isIsoPrice(v) {
+      return v.matches('^[0-9]+(\\.[0-9]{1,2})?$');
+    }
+
+    match /contacts/{documentId} {
+      allow create: if
+        hasOnlyKeys(['name', 'email', 'company', 'projectDescription', 'serviceName', 'calculatedTotal', 'timestamp', 'source']) &&
+        isString(request.resource.data.name) && request.resource.data.name.size() >= 2 && request.resource.data.name.size() <= 120 &&
+        isString(request.resource.data.email) && request.resource.data.email.size() <= 180 && isEmail(request.resource.data.email) &&
+        (!('company' in request.resource.data) || (isString(request.resource.data.company) && request.resource.data.company.size() <= 160)) &&
+        isString(request.resource.data.projectDescription) && request.resource.data.projectDescription.size() >= 10 && request.resource.data.projectDescription.size() <= 5000 &&
+        isString(request.resource.data.serviceName) && request.resource.data.serviceName.size() <= 120 &&
+        isString(request.resource.data.calculatedTotal) && isIsoPrice(request.resource.data.calculatedTotal) &&
+        request.resource.data.timestamp == request.time &&
+        request.resource.data.source in ['web', 'kiosk'];
+
       allow read, update, delete: if false;
     }
-    match /estimates/{document=**} {
-      allow create: if true;
+
+    match /estimates/{documentId} {
+      allow create: if
+        hasOnlyKeys(['serviceValue', 'quantityValue', 'deliveryValue', 'calculatedTotal', 'timestamp', 'source']) &&
+        isString(request.resource.data.serviceValue) && request.resource.data.serviceValue.size() > 0 && request.resource.data.serviceValue.size() <= 60 &&
+        isString(request.resource.data.quantityValue) && request.resource.data.quantityValue.size() > 0 && request.resource.data.quantityValue.size() <= 60 &&
+        isString(request.resource.data.deliveryValue) && request.resource.data.deliveryValue.size() > 0 && request.resource.data.deliveryValue.size() <= 120 &&
+        isString(request.resource.data.calculatedTotal) && isIsoPrice(request.resource.data.calculatedTotal) &&
+        request.resource.data.timestamp == request.time &&
+        request.resource.data.source in ['web', 'kiosk'];
+
       allow read, update, delete: if false;
     }
   }
