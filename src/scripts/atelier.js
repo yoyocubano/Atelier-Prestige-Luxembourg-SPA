@@ -1,43 +1,51 @@
 import { db } from '../firebase.js';
-import { collection, addDoc } from 'firebase/firestore';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 
-const serviceEl = document.getElementById("calc-service");
-const unitsEl = document.getElementById("calc-units");
-const resultEl = document.getElementById("calc-result");
-const deliveryRadios = document.getElementsByName("delivery");
-const bookBtn = document.getElementById("calc-book-btn");
+const serviceEl = document.getElementById('calc-service');
+const unitsEl = document.getElementById('calc-units');
+const resultEl = document.getElementById('calc-result');
+const deliveryRadios = document.getElementsByName('delivery');
+const bookBtn = document.getElementById('calc-book-btn');
 
-const toast = document.getElementById("toast-notification");
-const toastTitle = document.getElementById("toast-title");
-const toastMessage = document.getElementById("toast-message");
-const toastIcon = document.getElementById("toast-icon");
+const toast = document.getElementById('toast-notification');
+const toastTitle = document.getElementById('toast-title');
+const toastMessage = document.getElementById('toast-message');
+const toastIcon = document.getElementById('toast-icon');
 
 function showToast(title, message, isError = false) {
   toastTitle.innerText = title.toUpperCase();
   toastMessage.innerText = message;
 
   if (isError) {
-    toastIcon.innerText = "error";
-    toastIcon.className = "material-symbols-outlined text-error";
-    toast.style.borderColor = "rgba(239, 68, 68, 0.4)";
+    toastIcon.innerText = 'error';
+    toastIcon.className = 'material-symbols-outlined text-error';
+    toast.style.borderColor = 'rgba(239, 68, 68, 0.4)';
   } else {
-    toastIcon.innerText = "verified";
-    toastIcon.className = "material-symbols-outlined text-primary";
-    toast.style.borderColor = "rgba(212, 175, 55, 0.4)";
+    toastIcon.innerText = 'verified';
+    toastIcon.className = 'material-symbols-outlined text-primary';
+    toast.style.borderColor = 'rgba(212, 175, 55, 0.4)';
   }
 
-  toast.style.transform = "translateY(0)";
-  toast.style.opacity = "1";
-  toast.style.pointerEvents = "auto";
+  toast.style.transform = 'translateY(0)';
+  toast.style.opacity = '1';
+  toast.style.pointerEvents = 'auto';
 
   setTimeout(() => {
-    toast.style.transform = "translateY(100px)";
-    toast.style.opacity = "0";
-    toast.style.pointerEvents = "none";
+    toast.style.transform = 'translateY(100px)';
+    toast.style.opacity = '0';
+    toast.style.pointerEvents = 'none';
   }, 6000);
 }
 
-let calculatedTotal = "50.00";
+function sanitizeInput(value, maxLength = 300) {
+  return String(value || '').trim().slice(0, maxLength);
+}
+
+function isValidEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+let calculatedTotal = '50.00';
 
 function getSelectedServiceText() {
   return serviceEl.options[serviceEl.selectedIndex].text;
@@ -48,11 +56,11 @@ function getSelectedUnitsText() {
 }
 
 function getSelectedDeliveryText() {
-  let deliveryText = "Standard";
+  let deliveryText = 'Standard';
 
   deliveryRadios.forEach((radio) => {
     if (radio.checked && parseFloat(radio.value) > 0) {
-      deliveryText = "Express 24h (+30€)";
+      deliveryText = 'Express 24h (+30€)';
     }
   });
 
@@ -75,45 +83,41 @@ function calculate() {
   resultEl.innerText = calculatedTotal;
 }
 
-[serviceEl, unitsEl].forEach((el) => el.addEventListener("change", calculate));
-deliveryRadios.forEach((radio) => radio.addEventListener("change", calculate));
+[serviceEl, unitsEl].forEach((el) => el.addEventListener('change', calculate));
+deliveryRadios.forEach((radio) => radio.addEventListener('change', calculate));
 
 if (bookBtn) {
-  bookBtn.addEventListener("click", () => {
+  bookBtn.addEventListener('click', async () => {
     const serviceName = getSelectedServiceText();
     const unitsName = getSelectedUnitsText();
     const deliveryName = getSelectedDeliveryText();
     const prefillMessage = `Bonjour,\n\nJe souhaite réserver un créneau de consultation privée pour le projet suivant :\n- Service : ${serviceName}\n- Quantité : ${unitsName}\n- Livraison : ${deliveryName}\n- Estimation budgétaire : ${calculatedTotal} € HT\n\nMerci de me recontacter pour valider la faisabilité technique.`;
 
-    document.getElementById("contact-description").value = prefillMessage;
-    document.getElementById("contact").scrollIntoView({ behavior: "smooth", block: "start" });
-    document.getElementById("contact-name").focus();
+    document.getElementById('contact-description').value = prefillMessage;
+    document.getElementById('contact').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    document.getElementById('contact-name').focus();
 
-    showToast(
-      "Option Sélectionnée",
-      "Les détails de l'estimateur ont été importés dans le formulaire.",
-      false,
-    );
+    showToast('Option Sélectionnée', "Les détails de l'estimateur ont été importés dans le formulaire.", false);
 
-    // Save estimate implicitly to Firestore
     try {
-        addDoc(collection(db, "estimates"), {
-            serviceValue: serviceEl.value,
-            quantityValue: unitsEl.value,
-            deliveryValue: getSelectedDeliveryText(),
-            calculatedTotal: calculatedTotal,
-            timestamp: new Date()
-        });
+      await addDoc(collection(db, 'estimates'), {
+        serviceValue: sanitizeInput(serviceEl.value, 60),
+        quantityValue: sanitizeInput(unitsEl.value, 60),
+        deliveryValue: sanitizeInput(getSelectedDeliveryText(), 120),
+        calculatedTotal,
+        timestamp: serverTimestamp(),
+        source: 'web',
+      });
     } catch (err) {
-        console.error("[Backend calculation update failed]", err);
+      console.error('[Estimate save failed]', err);
     }
   });
 }
 
-const contactForm = document.getElementById("contact-form");
-const submitBtn = document.getElementById("contact-submit-btn");
+const contactForm = document.getElementById('contact-form');
+const submitBtn = document.getElementById('contact-submit-btn');
 
-contactForm.addEventListener("submit", async (event) => {
+contactForm.addEventListener('submit', async (event) => {
   event.preventDefault();
 
   const submitOriginalText = submitBtn.innerHTML;
@@ -123,49 +127,53 @@ contactForm.addEventListener("submit", async (event) => {
     TRAITEMENT EN COURS...
   `;
 
-  const name = document.getElementById("contact-name").value;
-  const email = document.getElementById("contact-email").value;
-  const company = document.getElementById("contact-company").value;
-  const projectDescription = document.getElementById("contact-description").value;
-  const whatsappConsent = document.getElementById("contact-whatsapp-consent").checked;
+  const name = sanitizeInput(document.getElementById('contact-name').value, 120);
+  const email = sanitizeInput(document.getElementById('contact-email').value, 180);
+  const company = sanitizeInput(document.getElementById('contact-company').value, 160);
+  const projectDescription = sanitizeInput(document.getElementById('contact-description').value, 5000);
+
+  if (!name || !email || !projectDescription || !isValidEmail(email)) {
+    showToast('Validation impossible', 'Veuillez renseigner un nom, un email valide et une description.', true);
+    submitBtn.disabled = false;
+    submitBtn.innerHTML = submitOriginalText;
+    return;
+  }
+
+  const whatsappConsent = document.getElementById('contact-whatsapp-consent').checked;
   const serviceName = getSelectedServiceText();
   const subject = encodeURIComponent(`Demande Atelier Prestige - ${serviceName}`);
   const emailBody = encodeURIComponent(
-    `Bonjour Atelier Prestige,\n\nJe souhaite soumettre une demande de personnalisation.\n\nNom : ${name}\nEmail : ${email}\nEntreprise / Événement : ${company || "Particulier"}\nService : ${serviceName}\nEstimation : ${calculatedTotal} € HT\n\nDétails du projet :\n${projectDescription}\n\nMerci de me recontacter.`,
+    `Bonjour Atelier Prestige,\n\nJe souhaite soumettre une demande de personnalisation.\n\nNom : ${name}\nEmail : ${email}\nEntreprise / Événement : ${company || 'Particulier'}\nService : ${serviceName}\nEstimation : ${calculatedTotal} € HT\n\nDétails du projet :\n${projectDescription}\n\nMerci de me recontacter.`,
   );
-  // Guardar contacto en Firestore
+
   try {
-      await addDoc(collection(db, "contacts"), {
-          name, 
-          email, 
-          company, 
-          projectDescription,
-          serviceName,
-          calculatedTotal,
-          timestamp: new Date()
-      });
+    await addDoc(collection(db, 'contacts'), {
+      name,
+      email,
+      company,
+      projectDescription,
+      serviceName: sanitizeInput(serviceName, 120),
+      calculatedTotal,
+      timestamp: serverTimestamp(),
+      source: 'web',
+    });
   } catch (err) {
-      console.error("[Backend contact save failed]", err);
+    console.error('[Contact save failed]', err);
   }
 
   const mailUrl = `mailto:contact@atelierprestige.lu?subject=${subject}&body=${emailBody}`;
-
   window.location.href = mailUrl;
-  showToast(
-    "Client Email Ouvert & Demande Enregistrée",
-    "Votre message a été préparé et enregistré.",
-    false,
-  );
+  showToast('Client Email Ouvert & Demande Enregistrée', 'Votre message a été préparé et enregistré.', false);
 
   if (whatsappConsent) {
-    const waNumber = "352621430283";
+    const waNumber = '352621430283';
     const waText = encodeURIComponent(
-      `Bonjour Atelier Prestige !\n\nJe souhaite soumettre ma demande de personnalisation :\n\nNom : ${name}\nEmail : ${email}\nEntreprise : ${company || "Particulier"}\nService : ${serviceName}\nEstimation : ${calculatedTotal} € HT\n\nDétails du projet :\n${projectDescription}\n\nMerci de me recontacter !`,
+      `Bonjour Atelier Prestige !\n\nJe souhaite soumettre ma demande de personnalisation :\n\nNom : ${name}\nEmail : ${email}\nEntreprise : ${company || 'Particulier'}\nService : ${serviceName}\nEstimation : ${calculatedTotal} € HT\n\nDétails du projet :\n${projectDescription}\n\nMerci de me recontacter !`,
     );
     const waUrl = `https://wa.me/${waNumber}?text=${waText}`;
 
-    submitBtn.classList.remove("bg-primary", "text-on-primary-fixed");
-    submitBtn.classList.add("bg-[#25D366]", "text-white");
+    submitBtn.classList.remove('bg-primary', 'text-on-primary-fixed');
+    submitBtn.classList.add('bg-[#25D366]', 'text-white');
     submitBtn.innerHTML = `
       <span class="material-symbols-outlined text-white mr-2">chat</span>
       ENVOYER DIRECTEMENT PAR WHATSAPP
@@ -174,10 +182,11 @@ contactForm.addEventListener("submit", async (event) => {
 
     submitBtn.onclick = (clickEvent) => {
       clickEvent.preventDefault();
-      window.open(waUrl, "_blank", "noopener");
+      window.open(waUrl, '_blank', 'noopener');
 
       setTimeout(() => {
-        submitBtn.className = "gold-shine group px-16 py-5 bg-primary text-on-primary-fixed font-label-caps text-label-caps tracking-widest hover:scale-105 transition-all duration-300 flex items-center gap-3";
+        submitBtn.className =
+          'gold-shine group px-16 py-5 bg-primary text-on-primary-fixed font-label-caps text-label-caps tracking-widest hover:scale-105 transition-all duration-300 flex items-center gap-3';
         submitBtn.innerHTML = submitOriginalText;
         submitBtn.onclick = null;
         submitBtn.disabled = false;
