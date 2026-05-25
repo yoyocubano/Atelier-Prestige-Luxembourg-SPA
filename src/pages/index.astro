@@ -1,103 +1,12 @@
 ---
+import Layout from "../layouts/Layout.astro";
+import "../styles/site.css";
+
+const pageTitle = "Atelier Prestige Luxembourg | Haute Personnalisation Artisanal";
+const pageDescription = "High-end bespoke craftsmanship, cadeaux corporatifs et personnalisation de luxe pour entreprises et mariages au Luxembourg.";
 ---
 
-<html class="dark" lang="fr"><head>
-<meta charset="utf-8" />
-<meta content="width=device-width, initial-scale=1.0" name="viewport" />
-<title>Atelier Prestige Luxembourg | Haute Personnalisation Artisanal</title>
-<script src="assets/03ba5d9f9e95fc3599acebcbe7e5fb9a.js" is:inline="" />
-<link href="assets/2fded476005bd927c451c4cc64d07f01.css" rel="stylesheet" />
-<link href="assets/a39f5c6fcbb87b419667ec984d2e579a.css" rel="stylesheet" />
-<link href="assets/a39f5c6fcbb87b419667ec984d2e579a.css" rel="stylesheet" />
-<script id="tailwind-config">
-        tailwind.config = {
-          darkMode: "class",
-          theme: {
-            extend: {
-              "colors": {
-                      "primary": "#f2ca50",
-                      "on-primary-fixed": "#241a00",
-                      "surface-container-lowest": "#0e0e0e",
-                      "primary-fixed": "#ffe088",
-                      "error-container": "#93000a",
-                      "on-tertiary-fixed-variant": "#27438a",
-                      "tertiary-fixed-dim": "#b4c5ff",
-                      "on-secondary": "#313030",
-                      "surface-tint": "#e9c349",
-                      "background": "#131313",
-                      "inverse-primary": "#735c00",
-                      "on-surface-variant": "#d0c5af",
-                      "secondary-fixed": "#e5e2e1",
-                      "outline": "#99907c",
-                      "error": "#ffb4ab",
-                      "inverse-surface": "#e5e2e1",
-                      "tertiary-container": "#97b0ff",
-                      "surface-container-highest": "#353534",
-                      "on-primary": "#3c2f00",
-                      "on-error-container": "#ffdad6",
-                      "surface-container": "#201f1f",
-                      "primary-container": "#d4af37",
-                      "primary-fixed-dim": "#e9c349",
-                      "surface": "#131313",
-                      "outline-variant": "#4d4635",
-                      "secondary-fixed-dim": "#c8c6c5",
-                      "tertiary-fixed": "#dbe1ff",
-                      "on-tertiary-fixed": "#00174b",
-                      "surface-variant": "#353534",
-                      "on-secondary-container": "#b7b5b4",
-                      "on-secondary-fixed-variant": "#474746",
-                      "inverse-on-surface": "#313030",
-                      "on-error": "#690005",
-                      "on-secondary-fixed": "#1c1b1b",
-                      "on-primary-container": "#554300",
-                      "surface-dim": "#131313",
-                      "surface-bright": "#3a3939",
-                      "tertiary": "#bfcdff",
-                      "on-primary-fixed-variant": "#574500",
-                      "surface-container-low": "#1c1b1b",
-                      "secondary": "#c8c6c5",
-                      "secondary-container": "#474746",
-                      "on-tertiary": "#082b72",
-                      "on-tertiary-container": "#254188",
-                      "surface-container-high": "#2a2a2a",
-                      "on-background": "#e5e2e1",
-                      "on-surface": "#e5e2e1"
-              },
-              "borderRadius": {
-                      "DEFAULT": "0.125rem",
-                      "lg": "0.25rem",
-                      "xl": "0.5rem",
-                      "full": "0.75rem"
-              },
-              "spacing": {
-                      "unit": "8px",
-                      "margin-mobile": "20px",
-                      "container-max": "1280px",
-                      "gutter": "24px",
-                      "margin-desktop": "64px"
-              },
-              "fontFamily": {
-                      "display-lg": ["Playfair Display"],
-                      "body-lg": ["Montserrat"],
-                      "body-md": ["Montserrat"],
-                      "headline-md": ["Playfair Display"],
-                      "headline-sm": ["Playfair Display"],
-                      "display-lg-mobile": ["Playfair Display"],
-                      "label-caps": ["Montserrat"]
-              },
-              "fontSize": {
-                      "display-lg": ["64px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
-                      "body-lg": ["18px", {"lineHeight": "1.6", "letterSpacing": "0.01em", "fontWeight": "400"}],
-                      "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
-                      "headline-md": ["32px", {"lineHeight": "1.3", "fontWeight": "600"}],
-                      "headline-sm": ["24px", {"lineHeight": "1.4", "fontWeight": "600"}],
-                      "display-lg-mobile": ["40px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "700"}],
-                      "label-caps": ["12px", {"lineHeight": "1.0", "letterSpacing": "0.15em", "fontWeight": "600"}]
-              }
-            },
-          },
-        }
-    </script>
+<Layout title={pageTitle} description={pageDescription} lang="fr">
 <style>
         .glass {
             background: rgba(26, 26, 26, 0.4);
@@ -133,12 +42,10 @@
             font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
         }
     </style>
-</head>
-<body class="bg-background text-on-surface selection:bg-primary selection:text-on-primary">
 <!-- TopNavBar -->
-<nav class="fixed top-0 w-full z-50 border-b border-outline-variant/30 backdrop-blur-md bg-surface/60 h-20">
+<nav id="top" class="fixed top-0 w-full z-50 border-b border-outline-variant/30 backdrop-blur-md bg-surface/60 h-20">
 <div class="flex justify-between items-center h-full px-margin-desktop max-w-container-max mx-auto">
-<a class="font-headline-sm text-headline-sm font-bold text-primary tracking-tighter" href="#">
+<a class="font-headline-sm text-headline-sm font-bold text-primary tracking-tighter" href="#top">
                 Atelier Prestige
             </a>
 <div class="hidden md:flex gap-8 items-center">
@@ -149,9 +56,9 @@
 </div>
 <div class="flex items-center gap-6">
 <span class="material-symbols-outlined text-primary cursor-pointer hover:scale-105 transition-transform">language</span>
-<button class="bg-primary-container text-on-primary-container font-label-caps text-label-caps px-6 py-3 tracking-widest hover:scale-105 transition-transform duration-200">
+<a class="bg-primary-container text-on-primary-container font-label-caps text-label-caps px-6 py-3 tracking-widest hover:scale-105 transition-transform duration-200" href="#contact">
                     DEVIS
-                </button>
+                </a>
 </div>
 </div>
 </nav>
@@ -173,15 +80,18 @@
                         High-End Bespoke Craftsmanship for Corporates and Weddings in Luxembourg. We transform exceptional objects into eternal memories.
                     </p>
 <div class="pt-4">
-<button class="gold-shine bg-primary text-on-primary-fixed px-10 py-5 font-label-caps text-label-caps tracking-widest hover:scale-105 transition-all duration-300">
+<a class="gold-shine bg-primary text-on-primary-fixed px-10 py-5 font-label-caps text-label-caps tracking-widest hover:scale-105 transition-all duration-300" href="#contact">
                             REQUEST A BESPOKE QUOTE
-                        </button>
+                        </a>
 </div>
 </div>
 </div>
 <!-- Hero Image Background Overlay -->
 <div class="absolute right-0 top-0 w-1/2 h-full opacity-40 md:opacity-100 mix-blend-lighten pointer-events-none">
-<img class="w-full h-full object-cover" data-alt="A close-up photographic shot of a master artisan's hands meticulously working on a leather piece with gold tools. The lighting is dramatic and moody, utilizing high-contrast chiaroscuro to highlight the texture of the grain and the metallic glint of the tools. The color palette is dominated by deep blacks and rich golden highlights, reflecting a high-end luxury atelier atmosphere. The mood is focused, serene, and radiates artisanal excellence." src="assets/15881da53d29331ca996485b056684b3.png" />
+<picture>
+<source srcset="assets/15881da53d29331ca996485b056684b3.webp" type="image/webp" />
+<img class="w-full h-full object-cover" alt="Mains d'artisan travaillant le cuir avec des outils dorés dans un atelier de luxe." src="assets/15881da53d29331ca996485b056684b3.webp" loading="eager" />
+</picture>
 </div>
 </section>
 <!-- Expertise Section -->
@@ -195,7 +105,10 @@
 <!-- Card 1 -->
 <div class="glass overflow-hidden border border-outline-variant/30 group hover:scale-[1.02] transition-all duration-500 hover:gold-gradient-border flex flex-col h-full">
 <div class="relative overflow-hidden aspect-video">
-<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="assets/photography_art.png" alt="Photographie & Direction d'Art" />
+<picture>
+<source srcset="assets/photography_art.webp" type="image/webp" />
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="assets/photography_art.webp" alt="Photographie & Direction d'Art" loading="lazy" />
+</picture>
 <div class="absolute top-4 left-4 glass p-2.5 rounded-full border border-primary/20 flex items-center justify-center">
 <span class="material-symbols-outlined text-primary text-2xl">photo_camera</span>
 </div>
@@ -203,13 +116,16 @@
 <div class="p-8 flex flex-col flex-grow">
 <h3 class="font-headline-sm text-headline-sm mb-4">Photographie & Direction d'Art</h3>
 <p class="font-body-md text-body-md text-on-surface-variant mb-6 flex-grow">Reportages d'art, direction visuelle haut de gamme et tirages de prestige pour sublimer l'image de votre marque ou de vos événements.</p>
-<a class="font-label-caps text-label-caps text-primary tracking-widest group-hover:underline underline-offset-4 mt-auto" href="#">DÉCOUVRIR</a>
+<a class="font-label-caps text-label-caps text-primary tracking-widest group-hover:underline underline-offset-4 mt-auto" href="#contact">DÉCOUVRIR</a>
 </div>
 </div>
 <!-- Card 2 -->
 <div class="glass overflow-hidden border border-outline-variant/30 group hover:scale-[1.02] transition-all duration-500 hover:gold-gradient-border flex flex-col h-full">
 <div class="relative overflow-hidden aspect-video">
-<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="assets/laser_engraving.png" alt="Gravure Laser de Haute Précision" />
+<picture>
+<source srcset="assets/laser_engraving.webp" type="image/webp" />
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="assets/laser_engraving.webp" alt="Gravure Laser de Haute Précision" loading="lazy" />
+</picture>
 <div class="absolute top-4 left-4 glass p-2.5 rounded-full border border-primary/20 flex items-center justify-center">
 <span class="material-symbols-outlined text-primary text-2xl">precision_manufacturing</span>
 </div>
@@ -217,13 +133,16 @@
 <div class="p-8 flex flex-col flex-grow">
 <h3 class="font-headline-sm text-headline-sm mb-4">Gravure Laser de Haute Précision</h3>
 <p class="font-body-md text-body-md text-on-surface-variant mb-6 flex-grow">Une finesse chirurgicale pour marquer le métal, le verre ou le bois précieux de vos créations.</p>
-<a class="font-label-caps text-label-caps text-primary tracking-widest group-hover:underline underline-offset-4 mt-auto" href="#">DÉCOUVRIR</a>
+<a class="font-label-caps text-label-caps text-primary tracking-widest group-hover:underline underline-offset-4 mt-auto" href="#contact">DÉCOUVRIR</a>
 </div>
 </div>
 <!-- Card 3 -->
 <div class="glass overflow-hidden border border-outline-variant/30 group hover:scale-[1.02] transition-all duration-500 hover:gold-gradient-border flex flex-col h-full">
 <div class="relative overflow-hidden aspect-video">
-<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="assets/organic_embroidery.png" alt="Broderie Organique Fine" />
+<picture>
+<source srcset="assets/organic_embroidery.webp" type="image/webp" />
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="assets/organic_embroidery.webp" alt="Broderie Organique Fine" loading="lazy" />
+</picture>
 <div class="absolute top-4 left-4 glass p-2.5 rounded-full border border-primary/20 flex items-center justify-center">
 <span class="material-symbols-outlined text-primary text-2xl">gesture</span>
 </div>
@@ -231,13 +150,16 @@
 <div class="p-8 flex flex-col flex-grow">
 <h3 class="font-headline-sm text-headline-sm mb-4">Broderie Organique Fine</h3>
 <p class="font-body-md text-body-md text-on-surface-variant mb-6 flex-grow">Des fils de soie et d'or pour des textiles d'exception au toucher naturel et durable.</p>
-<a class="font-label-caps text-label-caps text-primary tracking-widest group-hover:underline underline-offset-4 mt-auto" href="#">DÉCOUVRIR</a>
+<a class="font-label-caps text-label-caps text-primary tracking-widest group-hover:underline underline-offset-4 mt-auto" href="#contact">DÉCOUVRIR</a>
 </div>
 </div>
 <!-- Card 4 -->
 <div class="glass overflow-hidden border border-outline-variant/30 group hover:scale-[1.02] transition-all duration-500 hover:gold-gradient-border flex flex-col h-full">
 <div class="relative overflow-hidden aspect-video">
-<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="assets/bespoke_leather.png" alt="Maroquinerie sur Mesure" />
+<picture>
+<source srcset="assets/bespoke_leather.webp" type="image/webp" />
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="assets/bespoke_leather.webp" alt="Maroquinerie sur Mesure" loading="lazy" />
+</picture>
 <div class="absolute top-4 left-4 glass p-2.5 rounded-full border border-primary/20 flex items-center justify-center">
 <span class="material-symbols-outlined text-primary text-2xl">work</span>
 </div>
@@ -245,7 +167,7 @@
 <div class="p-8 flex flex-col flex-grow">
 <h3 class="font-headline-sm text-headline-sm mb-4">Maroquinerie sur Mesure</h3>
 <p class="font-body-md text-body-md text-on-surface-variant mb-6 flex-grow">Travail artisanal des cuirs les plus nobles pour des pièces uniques gravées et dorées.</p>
-<a class="font-label-caps text-label-caps text-primary tracking-widest group-hover:underline underline-offset-4 mt-auto" href="#">DÉCOUVRIR</a>
+<a class="font-label-caps text-label-caps text-primary tracking-widest group-hover:underline underline-offset-4 mt-auto" href="#contact">DÉCOUVRIR</a>
 </div>
 </div>
 </div>
@@ -255,7 +177,10 @@
 <section class="py-24 bg-surface-container-lowest" id="b2b">
 <div class="px-margin-desktop max-w-container-max mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
 <div class="relative aspect-[4/5] md:order-last">
-<img class="w-full h-full object-cover" data-alt="A modern and ultra-sleek corporate office interior in the Kirchberg district of Luxembourg, featuring floor-to-ceiling windows and minimalist furniture. The lighting is soft and professional, highlighting a curated display of luxury corporate gifts on a glass table. The atmosphere is sophisticated and successful, with a deep charcoal and gold color palette that aligns with the brand's aesthetic of prestige and exclusivity." src="assets/9415d8ee05c31c7f7bb84a5138b6479c.png" />
+<picture>
+<source srcset="assets/9415d8ee05c31c7f7bb84a5138b6479c.webp" type="image/webp" />
+<img class="w-full h-full object-cover" alt="Bureau corporate luxembourgeois avec cadeaux d'affaires personnalisés." src="assets/9415d8ee05c31c7f7bb84a5138b6479c.webp" loading="lazy" />
+</picture>
 <div class="absolute -bottom-8 -left-8 p-8 glass border border-primary/20 max-w-xs">
 <p class="font-headline-sm text-headline-sm text-primary mb-2">Kirchberg &amp; Cloche d'Or</p>
 <p class="font-body-md text-body-md">Service premium dédié aux institutions financières et cabinets de prestige.</p>
@@ -278,9 +203,9 @@
 <span class="material-symbols-outlined text-primary">verified</span> Personnalisation à l'unité ou en série
                         </li>
 </ul>
-<button class="border border-primary text-primary px-8 py-4 font-label-caps text-label-caps tracking-widest flex items-center gap-3 hover:bg-primary hover:text-on-primary transition-all duration-300">
+<a class="border border-primary text-primary px-8 py-4 font-label-caps text-label-caps tracking-widest flex items-center gap-3 hover:bg-primary hover:text-on-primary transition-all duration-300" href="#contact">
 <span class="material-symbols-outlined">download</span> DOWNLOAD PDF CATALOG
-                    </button>
+                    </a>
 </div>
 </div>
 </section>
@@ -335,7 +260,7 @@
 <p class="text-center font-body-md text-body-md text-on-surface-variant mt-8 italic">
                                 *Ce montant est une estimation hors taxes. Une étude technique sera réalisée lors de la validation.
                             </p>
-<button class="mt-8 w-full bg-primary text-on-primary-fixed py-4 font-label-caps text-label-caps tracking-widest hover:bg-primary-fixed transition-colors">
+<button id="calc-book-btn" class="mt-8 w-full bg-primary text-on-primary-fixed py-4 font-label-caps text-label-caps tracking-widest hover:bg-primary-fixed transition-colors">
                                 RÉSERVER CE CRÉNEAU
                             </button>
 </div>
@@ -365,6 +290,10 @@
 <div class="relative">
 <textarea id="contact-description" class="w-full bg-transparent border-0 border-b border-outline text-on-surface py-2 focus:ring-0 focus:border-primary placeholder:text-outline-variant transition-all resize-none outline-none" placeholder="Décrivez votre projet..." rows="4" required></textarea>
 </div>
+<label class="flex items-start gap-3 font-body-md text-body-md text-on-surface-variant">
+<input id="contact-whatsapp-consent" class="mt-2" type="checkbox" />
+<span>J'accepte de transférer les informations saisies vers WhatsApp (Meta) si je choisis l'envoi direct par WhatsApp.</span>
+</label>
 <div class="flex justify-center">
 <button id="contact-submit-btn" class="gold-shine group px-16 py-5 bg-primary text-on-primary-fixed font-label-caps text-label-caps tracking-widest hover:scale-105 transition-all duration-300 flex items-center gap-3" type="submit">
                             ENVOYER MA DEMANDE
@@ -394,130 +323,17 @@
 <p class="font-body-md text-body-md text-on-surface-variant">© 2024 Atelier Prestige Luxembourg. Haute Personnalisation Artisanal.</p>
 </div>
 <div class="flex flex-wrap justify-center gap-8">
-<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors duration-300" href="#">Mentions Légales</a>
-<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors duration-300" href="#">Confidentialité</a>
-<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors duration-300" href="#">Luxembourg-City</a>
-<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors duration-300" href="#">Kirchberg</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors duration-300" href="#contact">Mentions Légales</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors duration-300" href="#contact">Confidentialité</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors duration-300" href="#b2b">Luxembourg-City</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors duration-300" href="#b2b">Kirchberg</a>
 </div>
 <div class="flex gap-4">
-<a class="text-on-surface-variant hover:text-primary transition-colors" href="#"><span class="material-symbols-outlined">camera</span></a>
-<a class="text-on-surface-variant hover:text-primary transition-colors" href="#"><span class="material-symbols-outlined">business</span></a>
+<a class="text-on-surface-variant hover:text-primary transition-colors" href="#expertise" aria-label="Voir les services photo"><span class="material-symbols-outlined">camera</span></a>
+<a class="text-on-surface-variant hover:text-primary transition-colors" href="#b2b" aria-label="Voir les services corporate"><span class="material-symbols-outlined">business</span></a>
 </div>
 </div>
 </footer>
 
-<script>
-        // Simple logic for the calculator
-        const serviceEl = document.getElementById('calc-service');
-        const unitsEl = document.getElementById('calc-units');
-        const resultEl = document.getElementById('calc-result');
-        const deliveryRadios = document.getElementsByName('delivery');
-
-        // Toast Helper
-        const toast = document.getElementById('toast-notification');
-        const toastTitle = document.getElementById('toast-title');
-        const toastMessage = document.getElementById('toast-message');
-        const toastIcon = document.getElementById('toast-icon');
-
-        function showToast(title, message, isError = false) {
-            toastTitle.innerText = title.toUpperCase();
-            toastMessage.innerText = message;
-            if (isError) {
-                toastIcon.innerText = "error";
-                toastIcon.className = "material-symbols-outlined text-error";
-                toast.style.borderColor = "rgba(239, 68, 68, 0.4)";
-            } else {
-                toastIcon.innerText = "verified";
-                toastIcon.className = "material-symbols-outlined text-primary";
-                toast.style.borderColor = "rgba(212, 175, 55, 0.4)";
-            }
-            
-            // Show toast slide-up & fade-in
-            toast.style.transform = "translateY(0)";
-            toast.style.opacity = "1";
-            toast.style.pointerEvents = "auto";
-
-            setTimeout(() => {
-                toast.style.transform = "translateY(100px)";
-                toast.style.opacity = "0";
-                toast.style.pointerEvents = "none";
-            }, 5000);
-        }
-
-        async function calculate() {
-            const basePrice = parseFloat(serviceEl.value);
-            const multiplier = parseFloat(unitsEl.value);
-            let deliveryFee = 0;
-            
-            deliveryRadios.forEach(radio => {
-                if(radio.checked) deliveryFee = parseFloat(radio.value);
-            });
-
-            const total = (basePrice * multiplier) + deliveryFee;
-            resultEl.innerText = total.toFixed(2);
-
-            // Real-time backend validation logging
-            try {
-                fetch('/api/estimate', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        serviceValue: serviceEl.value,
-                        quantityValue: unitsEl.value,
-                        deliveryValue: deliveryFee
-                    })
-                });
-            } catch (err) {
-                console.error("[Backend calculation update failed]", err);
-            }
-        }
-
-        [serviceEl, unitsEl].forEach(el => el.addEventListener('change', calculate));
-        deliveryRadios.forEach(radio => radio.addEventListener('change', calculate));
-        
-        // Form Submission Integration
-        const contactForm = document.getElementById('contact-form');
-        const submitBtn = document.getElementById('contact-submit-btn');
-
-        contactForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const submitOriginalText = submitBtn.innerHTML;
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = `
-                <span class="animate-spin inline-block w-4 h-4 border-2 border-current border-t-transparent rounded-full mr-2"></span>
-                TRAITEMENT EN COURS...
-            `;
-
-            const name = document.getElementById('contact-name').value;
-            const email = document.getElementById('contact-email').value;
-            const company = document.getElementById('contact-company').value;
-            const projectDescription = document.getElementById('contact-description').value;
-
-            try {
-                const response = await fetch('/api/contact', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name, email, company, projectDescription })
-                });
-
-                const result = await response.json();
-
-                if (result.success) {
-                    showToast("Savoir-Faire Enregistré", result.message, false);
-                    contactForm.reset();
-                } else {
-                    showToast("Erreur de Soumission", result.error || "Une erreur est survenue.", true);
-                }
-            } catch (error) {
-                showToast("Échec de Connexion", "Impossible de contacter l'Atelier. Veuillez vérifier votre réseau.", true);
-            } finally {
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = submitOriginalText;
-            }
-        });
-
-        // Initial calc
-        calculate();
-    </script>
-</body></html>
+<script src="../scripts/atelier.js"></script>
+</Layout>

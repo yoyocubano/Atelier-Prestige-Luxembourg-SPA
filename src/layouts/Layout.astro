@@ -3,20 +3,22 @@ interface Props {
 	title: string;
 	description?: string;
 	image?: string;
+	lang?: string;
 }
 
 const { 
 	title, 
 	description = "Atelier Prestige Luxembourg. Artisanat numérique, cadeaux corporatifs et personnalisation de luxe.",
-	image = "https://yoyocubano.github.io/Atelier-Prestige-Luxembourg-SPA/assets/15881da53d29331ca996485b056684b3.png"
+	image = "https://yoyocubano.github.io/Atelier-Prestige-Luxembourg-SPA/assets/15881da53d29331ca996485b056684b3.webp",
+	lang = "fr"
 } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en">
+<html class="dark" lang={lang}>
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
 		
@@ -40,7 +42,7 @@ const {
 		<meta property="twitter:description" content={description} />
 		<meta property="twitter:image" content={image} />
 	</head>
-	<body>
+	<body class="bg-background text-on-surface selection:bg-primary selection:text-on-primary">
 		<slot />
 	</body>
 </html>
