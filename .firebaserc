@@ -1,0 +1,12 @@
+{
+  "projects": {
+    "default": "cosmopolita-app-1234"
+  },
+  "targets": {
+    "cosmopolita-app-1234": {
+      "hosting": {
+        "atelier-prestige-spa": ["atelier-prestige-spa"]
+      }
+    }
+  }
+}

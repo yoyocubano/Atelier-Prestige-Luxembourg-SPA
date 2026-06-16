@@ -1,6 +1,5 @@
 import { defineConfig } from 'astro/config';
 
 export default defineConfig({
-  site: 'https://yoyocubano.github.io',
-  base: '/Atelier-Prestige-Luxembourg-SPA'
+  site: 'https://cosmopolita-app-1234--atelier-spa.web.app',
 });
