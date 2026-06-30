@@ -1,0 +1,402 @@
+---
+import Layout from "../layouts/Layout.astro";
+import "../styles/site.css";
+---
+
+<Layout
+  title="Boutique | Atelier Prestige Luxembourg"
+  description="Créations artisanales personnalisées: mascotas, baby shower, mémorias, personnalisation. Pièces uniques au Luxembourg."
+  lang="fr"
+>
+
+<style is:inline>
+  .filter-btn.active{border-color:#d4af37!important;color:#d4af37!important;background:rgba(212,175,55,.07)}
+  #product-grid article img{transition:transform .5s ease}
+  #product-grid article:hover img{transform:scale(1.06)}
+  .line-clamp-2{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  @keyframes pulse-gold{0%,100%{box-shadow:0 0 0 0 rgba(212,175,55,.4)}50%{box-shadow:0 0 0 8px rgba(212,175,55,0)}}
+  #cart-toggle.pulse{animation:pulse-gold .6s ease}
+  .scrollbar-hide{scrollbar-width:none;-ms-overflow-style:none}
+  .scrollbar-hide::-webkit-scrollbar{display:none}
+</style>
+
+<!-- NAV -->
+<nav class="fixed top-0 w-full z-50 border-b border-white/5 backdrop-blur-md bg-[#0d0d0d]/80 h-20">
+  <div class="flex justify-between items-center h-full px-6 max-w-7xl mx-auto">
+    <a href="/" class="text-white font-light tracking-[0.2em] text-sm uppercase">Atelier Prestige</a>
+    <div class="hidden md:flex gap-8 items-center">
+      <a href="/#expertise" class="text-[10px] tracking-[0.2em] uppercase text-white/40 hover:text-white/80 transition-colors">Expertise</a>
+      <a href="/#b2b"       class="text-[10px] tracking-[0.2em] uppercase text-white/40 hover:text-white/80 transition-colors">B2B</a>
+      <a href="/#contact"   class="text-[10px] tracking-[0.2em] uppercase text-white/40 hover:text-white/80 transition-colors">Contact</a>
+      <a href="/boutique"   class="text-[10px] tracking-[0.2em] uppercase text-[#d4af37] border border-[#d4af37]/40 px-4 py-2 hover:bg-[#d4af37]/10 transition-colors">Boutique</a>
+    </div>
+    <a href="/#contact" class="text-[9px] tracking-[0.25em] uppercase bg-white/5 text-white/60 px-4 py-2 hover:bg-white/10 border border-white/10 transition-colors">Devis</a>
+  </div>
+</nav>
+
+<main class="min-h-screen bg-[#0d0d0d]">
+
+  <!-- HERO -->
+  <section class="pt-36 pb-16 px-6 max-w-7xl mx-auto text-center">
+    <span class="text-[#d4af37] tracking-[0.4em] uppercase text-[10px] font-medium block mb-5 opacity-80">Atelier × WeLuxEvents · Luxembourg</span>
+    <h1 class="text-5xl md:text-7xl font-light text-white mb-6 leading-none tracking-tight">La Boutique</h1>
+    <p class="text-[#555] text-base max-w-lg mx-auto leading-relaxed mb-4">
+      Broderie · Gravure laser · Découpe vinyle<br>
+      <span class="text-[#d4af37]/60 text-sm italic font-light">Cosas únicas para momentos que no se olvidan</span>
+    </p>
+    <div class="flex flex-wrap justify-center gap-4 text-[#333] text-[9px] tracking-widest uppercase mt-6">
+      <span>🐾 Mascotas</span><span>·</span>
+      <span>👶 Baby Shower</span><span>·</span>
+      <span>💛 Mémorias</span><span>·</span>
+      <span>✨ Personnalisation</span>
+    </div>
+  </section>
+
+  <!-- CATEGORY FILTERS -->
+  <div class="sticky top-20 z-40 bg-[#0d0d0d]/97 backdrop-blur-md border-b border-white/5 py-4 px-4">
+    <div class="max-w-7xl mx-auto flex gap-2 overflow-x-auto scrollbar-hide pb-1">
+      <button data-cat="all"      class="filter-btn active px-5 py-2 text-[9px] tracking-[0.2em] uppercase border whitespace-nowrap transition-all cursor-pointer border-[#d4af37] text-[#d4af37]">Tout (24)</button>
+      <button data-cat="pets"     class="filter-btn px-5 py-2 text-[9px] tracking-[0.2em] uppercase border whitespace-nowrap transition-all cursor-pointer border-white/15 text-white/35 hover:border-[#d4af37] hover:text-[#d4af37]">🐾 Mascotas (6)</button>
+      <button data-cat="baby"     class="filter-btn px-5 py-2 text-[9px] tracking-[0.2em] uppercase border whitespace-nowrap transition-all cursor-pointer border-white/15 text-white/35 hover:border-[#d4af37] hover:text-[#d4af37]">👶 Baby Shower (6)</button>
+      <button data-cat="memories" class="filter-btn px-5 py-2 text-[9px] tracking-[0.2em] uppercase border whitespace-nowrap transition-all cursor-pointer border-white/15 text-white/35 hover:border-[#d4af37] hover:text-[#d4af37]">💛 Mémorias (6)</button>
+      <button data-cat="custom"   class="filter-btn px-5 py-2 text-[9px] tracking-[0.2em] uppercase border whitespace-nowrap transition-all cursor-pointer border-white/15 text-white/35 hover:border-[#d4af37] hover:text-[#d4af37]">✨ Personnalisation (6)</button>
+    </div>
+  </div>
+
+  <!-- PRODUCT GRID -->
+  <div class="max-w-7xl mx-auto px-4 mt-10 pb-36">
+    <p id="product-count" class="text-[#333] text-[9px] tracking-widest uppercase mb-6 px-2"></p>
+    <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+      <div class="col-span-full flex justify-center py-24">
+        <div class="w-8 h-8 border-2 border-[#d4af37]/20 border-t-[#d4af37] rounded-full animate-spin"></div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- OVERLAY -->
+<div id="cart-overlay" class="fixed inset-0 bg-black/60 z-50 hidden backdrop-blur-sm cursor-pointer"></div>
+
+<!-- CART DRAWER -->
+<aside id="cart-drawer"
+  style="transform:translateX(100%);transition:transform .32s cubic-bezier(.4,0,.2,1)"
+  class="fixed top-0 right-0 h-full w-full max-w-sm bg-[#0f0f0f] border-l border-white/5 z-[51] flex flex-col">
+  <div class="flex items-center justify-between px-6 py-5 border-b border-white/5">
+    <div>
+      <h2 class="text-white text-[10px] tracking-[0.3em] uppercase">Votre Panier</h2>
+      <span id="cart-label" class="text-[#444] text-[9px]">0 articles</span>
+    </div>
+    <button id="cart-close" class="text-[#444] hover:text-white transition-colors text-2xl w-8 h-8 flex items-center justify-center leading-none">&times;</button>
+  </div>
+  <div id="cart-items" class="flex-1 overflow-y-auto p-6 space-y-4">
+    <p class="text-[#333] text-center text-sm py-16">Votre panier est vide.</p>
+  </div>
+  <div class="p-6 border-t border-white/5 space-y-4">
+    <div class="flex justify-between items-center">
+      <span class="text-[#444] text-[9px] tracking-widest uppercase">Total</span>
+      <span id="cart-total" class="text-[#d4af37] text-xl font-light">€0.00</span>
+    </div>
+    <button id="checkout-btn" class="w-full bg-[#d4af37] text-black text-[10px] tracking-[0.25em] uppercase font-medium py-4 hover:bg-[#e8c84a] transition-colors active:scale-[.98]">
+      Passer commande
+    </button>
+  </div>
+</aside>
+
+<!-- FLOATING CART BUTTON -->
+<button id="cart-toggle"
+  class="fixed bottom-8 right-6 z-40 w-14 h-14 bg-[#d4af37] rounded-full flex items-center justify-center shadow-2xl hover:bg-[#e8c84a] transition-all hover:scale-105 active:scale-95">
+  <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+  </svg>
+  <span id="cart-badge" style="display:none" class="absolute -top-1 -right-1 min-w-[20px] h-5 bg-black text-[#d4af37] text-[9px] font-bold rounded-full items-center justify-center px-1">0</span>
+</button>
+
+
+<!-- CHECKOUT MODAL -->
+<div id="checkout-modal" style="display:none"
+  class="fixed inset-0 bg-black/85 z-[60] items-start justify-center p-4 pt-8 backdrop-blur-md overflow-y-auto">
+  <div class="bg-[#0f0f0f] border border-white/10 w-full max-w-md p-8 relative my-4">
+    <button id="checkout-close" class="absolute top-5 right-5 text-[#444] hover:text-white text-2xl w-8 h-8 flex items-center justify-center leading-none">&times;</button>
+    <span class="text-[#d4af37] text-[9px] tracking-[0.3em] uppercase block mb-3">Commander</span>
+    <h2 class="text-white text-2xl font-light mb-2">Finaliser</h2>
+    <p class="text-[#444] text-sm mb-7">Notre équipe vous contacte sous 24h pour confirmer les détails de personnalisation.</p>
+    <form id="order-form" class="space-y-4">
+      <div>
+        <label class="text-[#444] text-[9px] tracking-[0.2em] uppercase block mb-2">Nom complet *</label>
+        <input name="name" required type="text" placeholder="Jean Dupont"
+          class="w-full bg-[#1a1a1a] border border-[#252525] focus:border-[#d4af37]/40 text-white px-4 py-3 text-sm outline-none transition-colors">
+      </div>
+      <div>
+        <label class="text-[#444] text-[9px] tracking-[0.2em] uppercase block mb-2">Email *</label>
+        <input name="email" required type="email" placeholder="jean@example.lu"
+          class="w-full bg-[#1a1a1a] border border-[#252525] focus:border-[#d4af37]/40 text-white px-4 py-3 text-sm outline-none transition-colors">
+      </div>
+      <div>
+        <label class="text-[#444] text-[9px] tracking-[0.2em] uppercase block mb-2">WhatsApp / Téléphone</label>
+        <input name="phone" type="tel" placeholder="+352 XXX XXX"
+          class="w-full bg-[#1a1a1a] border border-[#252525] focus:border-[#d4af37]/40 text-white px-4 py-3 text-sm outline-none transition-colors">
+      </div>
+      <div>
+        <label class="text-[#444] text-[9px] tracking-[0.2em] uppercase block mb-2">Détails de personnalisation</label>
+        <textarea name="notes" rows="3" placeholder="Prénom à broder, couleurs, photo à envoyer…"
+          class="w-full bg-[#1a1a1a] border border-[#252525] focus:border-[#d4af37]/40 text-white px-4 py-3 text-sm outline-none transition-colors resize-none"></textarea>
+      </div>
+      <div id="order-summary" class="bg-[#161616] border border-[#252525] p-4 space-y-2 text-xs text-[#666]"></div>
+      <button type="submit" id="submit-btn"
+        class="w-full bg-[#d4af37] text-black text-[10px] tracking-[0.25em] uppercase font-medium py-4 hover:bg-[#e8c84a] transition-colors mt-2 disabled:opacity-40 disabled:cursor-not-allowed">
+        Envoyer la commande
+      </button>
+      <p class="text-[#2a2a2a] text-[9px] text-center">Paiement confirmé avec notre équipe · Livraison Luxembourg</p>
+    </form>
+    <div id="order-success" class="hidden text-center py-10">
+      <div class="text-5xl mb-5 text-[#d4af37]">✓</div>
+      <h3 class="text-white text-xl font-light mb-3">Commande envoyée !</h3>
+      <p class="text-[#555] text-sm leading-relaxed mb-6">Nous vous contacterons sous 24h pour confirmer votre commande et discuter des détails de personnalisation.</p>
+      <button id="success-close" class="text-[#d4af37] text-[9px] tracking-widest uppercase underline underline-offset-4">Continuer les achats</button>
+    </div>
+  </div>
+</div>
+
+
+<script is:inline>
+// ── CONFIG ── Rellena estos IDs después del setup de Google Sheets
+const SHEET_ID = '';          // Google Sheet ID (vacío = productos hardcoded)
+const APPS_SCRIPT_URL = '';   // URL del Google Apps Script (para guardar pedidos)
+
+// ── CATÁLOGO ── 24 productos · 4 nichos · 6 por nicho
+const CATALOGUE = [
+  // 🐾 MASCOTAS
+  {id:'m1',cat:'pets',name:'Bandana brodée personnalisée',price:22,machine:'Bordadora',
+   img:'https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=500&q=80&fit=crop',
+   desc:'Bandana 100% coton avec le prénom de votre animal. 3 tailles. Fil premium.'},
+  {id:'m2',cat:'pets',name:'Chapa de nombre grabada laser',price:15,machine:'Láser',
+   img:'https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=500&q=80&fit=crop',
+   desc:'Médaille inox. Nom + numéro gravés laser. Double face. Résistante à l\'eau.'},
+  {id:'m3',cat:'pets',name:'Tasse photo mascota personnalisée',price:24,machine:'Sublimación',
+   img:'https://images.unsplash.com/photo-1544568100-847a948585b9?w=500&q=80&fit=crop',
+   desc:'Tasse céramique 330ml HD avec photo de votre animal. Couleurs durables.'},
+  {id:'m4',cat:'pets',name:'Porte-clés gravé nom animal',price:13,machine:'Láser',
+   img:'https://images.unsplash.com/photo-1583337130417-3346a1be7dee?w=500&q=80&fit=crop',
+   desc:'Bois massif ou acrylique. Prénom + silhouette gravés laser.'},
+  {id:'m5',cat:'pets',name:'Portrait animal gravure laser A4',price:38,machine:'Láser',
+   img:'https://images.unsplash.com/photo-1574158622682-e40e69881006?w=500&q=80&fit=crop',
+   desc:'Portrait artistique 21×30cm gravé sur bois. Cadre noir inclus.'},
+  {id:'m6',cat:'pets',name:'Gorra bordada personalizada',price:29,machine:'Bordadora',
+   img:'https://images.unsplash.com/photo-1521369909029-2afed882baee?w=500&q=80&fit=crop',
+   desc:"Casquette premium brodée 'Dog Mom' / 'Cat Dad' ou texte custom. Taille unique."},
+  // 👶 BABY SHOWER
+  {id:'b1',cat:'baby',name:'Pack naissance complet',price:65,machine:'Bordadora + Láser',
+   img:'https://images.unsplash.com/photo-1519340241574-2cec6aef0c01?w=500&q=80&fit=crop',
+   desc:'Babero bordado + gorro tricoté + porte-clés gravé. Tout personnalisé prénom + date.'},
+  {id:'b2',cat:'baby',name:'Bonnet tricoté prénom',price:28,machine:'Tejido circular',
+   img:'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=500&q=80&fit=crop',
+   desc:'100% laine mérinos. Prénom brodé. 5 coloris. Naissance à 6 mois.'},
+  {id:'b3',cat:'baby',name:'Babero bordado con nombre',price:25,machine:'Bordadora',
+   img:'https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=500&q=80&fit=crop',
+   desc:'Coton bio. Prénom au fil coloré. Lavable en machine.'},
+  {id:'b4',cat:'baby',name:'Letrero habitación bebé',price:48,machine:'Láser/CNC',
+   img:'https://images.unsplash.com/photo-1555252333-9f8e92e65df9?w=500&q=80&fit=crop',
+   desc:'Plaque bois 30×15cm. Prénom gravé. Formes: nuage, étoile, arc-en-ciel.'},
+  {id:'b5',cat:'baby',name:'Tasse "Bonne Maman"',price:24,machine:'Sublimación',
+   img:'https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?w=500&q=80&fit=crop',
+   desc:'Tasse 330ml. Prénom du bébé + date de naissance. Pour la nouvelle maman.'},
+  {id:'b6',cat:'baby',name:'Set stickers bienvenida bebé',price:16,machine:'Cortadora',
+   img:'https://images.unsplash.com/photo-1604147706283-d7119b5b822c?w=500&q=80&fit=crop',
+   desc:'12 stickers vinyle A4: prénom, date, étoiles, cœurs. Parfaits pour décorer.'},
+  // 💛 MÉMORIAS
+  {id:'r1',cat:'memories',name:'Plaque receta de la abuela',price:65,machine:'Láser',
+   img:'https://images.unsplash.com/photo-1466637574441-749b8f19452f?w=500&q=80&fit=crop',
+   desc:'Planche bois 30×20cm. Recette familiale gravée laser. Cadeau éternel.'},
+  {id:'r2',cat:'memories',name:'Tabla cocina con dedicatoria',price:48,machine:'Láser',
+   img:'https://images.unsplash.com/photo-1585238342134-b80e55a5e0b2?w=500&q=80&fit=crop',
+   desc:'Planche à découper bois massif avec dédicace gravée. Cadeau de mariage parfait.'},
+  {id:'r3',cat:'memories',name:'Cojín bordado personalizado',price:55,machine:'Bordadora',
+   img:'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=500&q=80&fit=crop',
+   desc:'Coussin 45×45cm. Citation ou texte brodé en fil doré. Housse lavable.'},
+  {id:'r4',cat:'memories',name:'Marco foto con texto grabado',price:42,machine:'Láser',
+   img:'https://images.unsplash.com/photo-1416339306562-f3d12fefd36f?w=500&q=80&fit=crop',
+   desc:'Cadre bois 20×25cm. Message gravé laser. Votre photo + votre texte.'},
+  {id:'r5',cat:'memories',name:'Álbum aniversario grabado',price:75,machine:'Láser',
+   img:'https://images.unsplash.com/photo-1518568814500-bf0f8d125f46?w=500&q=80&fit=crop',
+   desc:'Album 30×30cm couverture bois gravée. Noms + date. 20 pages papier premium.'},
+  {id:'r6',cat:'memories',name:'Plaque souvenir Luxembourg',price:38,machine:'Láser',
+   img:'https://images.unsplash.com/photo-1590677197960-4a85a80cdd67?w=500&q=80&fit=crop',
+   desc:'Plaque bois/acrylique 15×10cm. Carte du Luxembourg + texte personnalisé.'},
+  // ✨ PERSONNALISATION
+  {id:'c1',cat:'custom',name:'Casquette brodée logo',price:29,machine:'Bordadora',
+   img:'https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=500&q=80&fit=crop',
+   desc:'Casquette 5 panneaux. Logo ou texte brodé haute précision. Équipes & événements.'},
+  {id:'c2',cat:'custom',name:'Stickers vinilo empresa A4',price:16,machine:'Cortadora',
+   img:'https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=500&q=80&fit=crop',
+   desc:'Stickers à votre logo découpés avec précision. Vinyle waterproof extérieur.'},
+  {id:'c3',cat:'custom',name:'Kit corporatif x5',price:125,machine:'Bordadora + Sublimación',
+   img:'https://images.unsplash.com/photo-1497366216548-37526070297c?w=500&q=80&fit=crop',
+   desc:'5 pièces assorties: casquette + tasse + porte-clés. Votre logo. Team building.'},
+  {id:'c4',cat:'custom',name:'Vinilo decorativo vitrine',price:35,machine:'Cortadora',
+   img:'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=500&q=80&fit=crop',
+   desc:'Vinyle découpé à vos dimensions avec votre logo. Pose simple, résultat pro.'},
+  {id:'c5',cat:'custom',name:'Tarjetas die-cut personalizadas',price:20,machine:'Cortadora',
+   img:'https://images.unsplash.com/photo-1607344645866-009c320b63e0?w=500&q=80&fit=crop',
+   desc:'50 cartes découpées à votre forme de logo. Impression laser premium.'},
+  {id:'c6',cat:'custom',name:'Termo grabado nombre + logo',price:38,machine:'Láser',
+   img:'https://images.unsplash.com/photo-1535025639604-9a804c092faa?w=500&q=80&fit=crop',
+   desc:'Thermos inox 500ml avec nom ou logo gravé laser. Cadeau entreprise premium.'},
+];
+
+const CAT_LABELS = {all:'Tout',pets:'🐾 Mascotas',baby:'👶 Baby Shower',memories:'💛 Mémorias',custom:'✨ Personnalisation'};
+let products = [], cart = JSON.parse(localStorage.getItem('ap-cart')||'[]'), activeFilter = 'all';
+
+// ── LOAD PRODUCTS (Google Sheets fallback to hardcoded) ──────────────────────
+async function loadProducts() {
+  if (SHEET_ID) {
+    try {
+      const r = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=Products`);
+      const t = await r.text();
+      const j = JSON.parse(t.replace(/^[^{]+/, '').replace(/\);?\s*$/, ''));
+      products = j.table.rows.map((row, i) => ({
+        id: row.c[0]?.v || `s${i}`, name: row.c[1]?.v || '',
+        cat: row.c[2]?.v || 'custom', price: parseFloat(row.c[3]?.v) || 0,
+        img: row.c[4]?.v || '', desc: row.c[5]?.v || '', machine: row.c[6]?.v || '',
+      }));
+    } catch { products = CATALOGUE; }
+  } else { products = CATALOGUE; }
+  renderGrid();
+}
+
+// ── RENDER GRID ──────────────────────────────────────────────────────────────
+function renderGrid() {
+  const list = activeFilter === 'all' ? products : products.filter(p => p.cat === activeFilter);
+  document.getElementById('product-count').textContent = `${list.length} produit${list.length !== 1 ? 's' : ''}`;
+  const grid = document.getElementById('product-grid');
+  if (!list.length) {
+    grid.innerHTML = '<div class="col-span-full py-24 text-center text-[#333] text-sm">Aucun produit dans cette catégorie.</div>';
+    return;
+  }
+  grid.innerHTML = list.map(p => `
+    <article class="border border-[#1e1e1e] hover:border-[#d4af37]/25 transition-all duration-300 bg-[#111] overflow-hidden group">
+      <div class="aspect-[4/3] overflow-hidden bg-[#1a1a1a]">
+        <img src="${p.img}" alt="${p.name}" loading="lazy"
+          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+          onerror="this.src='https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=500'">
+      </div>
+      <div class="p-4">
+        <span class="text-[#d4af37]/50 text-[8px] tracking-[0.2em] uppercase block mb-1">${CAT_LABELS[p.cat]||p.cat}</span>
+        <h3 class="text-white text-sm font-light leading-snug mb-1">${p.name}</h3>
+        <p class="text-[#444] text-xs leading-relaxed mb-3 line-clamp-2">${p.desc}</p>
+        <div class="flex items-center justify-between">
+          <span class="text-[#d4af37] font-medium">€${p.price}</span>
+          <button class="add-btn border border-[#2a2a2a] hover:border-[#d4af37]/50 text-[#555] hover:text-[#d4af37] text-[8px] tracking-[0.15em] uppercase px-3 py-2 transition-all" data-id="${p.id}">+ Ajouter</button>
+        </div>
+      </div>
+    </article>`).join('');
+  grid.querySelectorAll('.add-btn').forEach(b => b.addEventListener('click', () => addToCart(b.dataset.id)));
+}
+
+
+// ── CART ─────────────────────────────────────────────────────────────────────
+function addToCart(id) {
+  const p = products.find(x => x.id === id); if (!p) return;
+  const ex = cart.find(x => x.id === id);
+  if (ex) ex.qty++; else cart.push({id:p.id, name:p.name, price:p.price, img:p.img, qty:1});
+  saveCart(); renderCart(); openDrawer();
+  const b = document.querySelector(`.add-btn[data-id="${id}"]`);
+  if (b) {
+    b.textContent = '✓ Ajouté'; b.style.cssText = 'border-color:#d4af37;color:#d4af37';
+    setTimeout(() => { b.textContent = '+ Ajouter'; b.style.cssText = ''; }, 1800);
+  }
+  const t = document.getElementById('cart-toggle');
+  t.classList.add('pulse'); setTimeout(() => t.classList.remove('pulse'), 700);
+}
+function removeFromCart(id) { cart = cart.filter(x => x.id !== id); saveCart(); renderCart(); }
+function saveCart() { localStorage.setItem('ap-cart', JSON.stringify(cart)); }
+function renderCart() {
+  const total = cart.reduce((s,i) => s + i.price * i.qty, 0);
+  const count = cart.reduce((s,i) => s + i.qty, 0);
+  document.getElementById('cart-total').textContent = `€${total.toFixed(2)}`;
+  document.getElementById('cart-label').textContent = `${count} article${count!==1?'s':''}`;
+  const badge = document.getElementById('cart-badge');
+  badge.textContent = count; badge.style.display = count ? 'flex' : 'none';
+  const el = document.getElementById('cart-items');
+  if (!cart.length) { el.innerHTML = '<p class="text-[#333] text-center text-sm py-16">Votre panier est vide.</p>'; return; }
+  el.innerHTML = cart.map(i => `
+    <div class="flex gap-3 pb-4 border-b border-[#1e1e1e] last:border-0 last:pb-0">
+      <img src="${i.img}" alt="${i.name}" class="w-16 h-16 object-cover bg-[#1a1a1a] flex-shrink-0"
+        onerror="this.src='https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=100'">
+      <div class="flex-1 min-w-0">
+        <p class="text-white text-xs leading-snug mb-1 line-clamp-2">${i.name}</p>
+        <p class="text-[#d4af37] text-sm">€${i.price} <span class="text-[#444]">×${i.qty}</span></p>
+      </div>
+      <button class="rm text-[#333] hover:text-red-400 transition-colors text-xl w-7 h-7 flex items-center justify-center flex-shrink-0 leading-none" data-id="${i.id}">&times;</button>
+    </div>`).join('');
+  el.querySelectorAll('.rm').forEach(b => b.addEventListener('click', () => removeFromCart(b.dataset.id)));
+}
+
+// ── UI ────────────────────────────────────────────────────────────────────────
+function openDrawer() {
+  document.getElementById('cart-drawer').style.transform = 'translateX(0)';
+  document.getElementById('cart-overlay').classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+}
+function closeDrawer() {
+  document.getElementById('cart-drawer').style.transform = 'translateX(100%)';
+  document.getElementById('cart-overlay').classList.add('hidden');
+  document.body.style.overflow = '';
+}
+
+document.getElementById('cart-toggle').addEventListener('click', openDrawer);
+document.getElementById('cart-close').addEventListener('click', closeDrawer);
+document.getElementById('cart-overlay').addEventListener('click', closeDrawer);
+
+document.querySelectorAll('.filter-btn').forEach(btn => btn.addEventListener('click', () => {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active'); activeFilter = btn.dataset.cat; renderGrid();
+}));
+
+// ── CHECKOUT ──────────────────────────────────────────────────────────────────
+document.getElementById('checkout-btn').addEventListener('click', () => {
+  closeDrawer();
+  const total = cart.reduce((s,i) => s+i.price*i.qty, 0);
+  document.getElementById('order-summary').innerHTML =
+    cart.map(i => `<div class="flex justify-between"><span class="line-clamp-1 flex-1 mr-4">${i.name} <span class="text-[#444]">×${i.qty}</span></span><span class="text-[#d4af37] whitespace-nowrap">€${(i.price*i.qty).toFixed(2)}</span></div>`).join('') +
+    `<div class="flex justify-between border-t border-[#2a2a2a] pt-2 mt-1 font-medium text-white"><span>Total</span><span class="text-[#d4af37]">€${total.toFixed(2)}</span></div>`;
+  const m = document.getElementById('checkout-modal'); m.style.display = 'flex';
+});
+document.getElementById('checkout-close').addEventListener('click', () => {
+  document.getElementById('checkout-modal').style.display = 'none';
+});
+
+document.getElementById('order-form').addEventListener('submit', async e => {
+  e.preventDefault();
+  const btn = document.getElementById('submit-btn'); btn.textContent = 'Envoi…'; btn.disabled = true;
+  const fd = new FormData(e.target);
+  const order = {
+    order_id: 'AP-' + Date.now().toString(36).toUpperCase(),
+    timestamp: new Date().toISOString(),
+    name: fd.get('name'), email: fd.get('email'),
+    phone: fd.get('phone'), notes: fd.get('notes'),
+    items: JSON.stringify(cart.map(i => `${i.name} x${i.qty} €${i.price}`)),
+    total: cart.reduce((s,i) => s+i.price*i.qty, 0).toFixed(2)
+  };
+  if (APPS_SCRIPT_URL) {
+    try {
+      await fetch(APPS_SCRIPT_URL, {method:'POST', body:JSON.stringify(order), mode:'no-cors', headers:{'Content-Type':'application/json'}});
+    } catch {}
+  }
+  document.getElementById('order-form').classList.add('hidden');
+  document.getElementById('order-success').classList.remove('hidden');
+  cart = []; saveCart(); renderCart();
+});
+
+document.getElementById('success-close').addEventListener('click', () => {
+  document.getElementById('checkout-modal').style.display = 'none';
+  document.getElementById('order-form').classList.remove('hidden');
+  document.getElementById('order-success').classList.add('hidden');
+  document.getElementById('order-form').reset();
+  const btn = document.getElementById('submit-btn'); btn.textContent = 'Envoyer la commande'; btn.disabled = false;
+});
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+renderCart(); loadProducts();
+</script>
+
+</Layout>
