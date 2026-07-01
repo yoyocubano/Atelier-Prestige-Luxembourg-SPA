@@ -1,6 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import "../styles/site.css";
+const BASE = import.meta.env.BASE_URL;
 ---
 
 <Layout
@@ -18,19 +19,46 @@ import "../styles/site.css";
   #cart-toggle.pulse{animation:pulse-gold .6s ease}
   .scrollbar-hide{scrollbar-width:none;-ms-overflow-style:none}
   .scrollbar-hide::-webkit-scrollbar{display:none}
+  .qty-btn{width:28px;height:28px;border:1px solid #252525;color:#666;display:flex;align-items:center;justify-content:center;font-size:16px;line-height:1;transition:all .2s;cursor:pointer;background:transparent}
+  .qty-btn:hover{border-color:#d4af37;color:#d4af37}
+  @keyframes slide-in{from{transform:translateY(-10px);opacity:0}to{transform:translateY(0);opacity:1}}
+  .toast{animation:slide-in .25s ease}
+  #mobile-menu{display:none}
+  #mobile-menu.open{display:flex}
+  .skeleton{background:linear-gradient(90deg,#1a1a1a 25%,#252525 50%,#1a1a1a 75%);background-size:200% 100%;animation:shimmer 1.5s infinite}
+  @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
 </style>
 
+<!-- TOAST -->
+<div id="toast" class="toast fixed top-24 right-5 z-[70] bg-[#1a1a1a] border border-[#d4af37]/30 text-white text-xs px-4 py-3 hidden max-w-xs">
+  <span id="toast-msg"></span>
+</div>
+
 <!-- NAV -->
-<nav class="fixed top-0 w-full z-50 border-b border-white/5 backdrop-blur-md bg-[#0d0d0d]/80 h-20">
+<nav class="fixed top-0 w-full z-50 border-b border-white/5 backdrop-blur-md bg-[#0d0d0d]/90 h-20">
   <div class="flex justify-between items-center h-full px-6 max-w-7xl mx-auto">
-    <a href="/" class="text-white font-light tracking-[0.2em] text-sm uppercase">Atelier Prestige</a>
+    <a href={`${BASE}`} class="text-white font-light tracking-[0.2em] text-sm uppercase">Atelier Prestige</a>
     <div class="hidden md:flex gap-8 items-center">
-      <a href="/#expertise" class="text-[10px] tracking-[0.2em] uppercase text-white/40 hover:text-white/80 transition-colors">Expertise</a>
-      <a href="/#b2b"       class="text-[10px] tracking-[0.2em] uppercase text-white/40 hover:text-white/80 transition-colors">B2B</a>
-      <a href="/#contact"   class="text-[10px] tracking-[0.2em] uppercase text-white/40 hover:text-white/80 transition-colors">Contact</a>
-      <a href="/boutique"   class="text-[10px] tracking-[0.2em] uppercase text-[#d4af37] border border-[#d4af37]/40 px-4 py-2 hover:bg-[#d4af37]/10 transition-colors">Boutique</a>
+      <a href={`${BASE}#expertise`} class="text-[10px] tracking-[0.2em] uppercase text-white/40 hover:text-white/80 transition-colors">Expertise</a>
+      <a href={`${BASE}#b2b`}       class="text-[10px] tracking-[0.2em] uppercase text-white/40 hover:text-white/80 transition-colors">B2B</a>
+      <a href={`${BASE}#contact`}   class="text-[10px] tracking-[0.2em] uppercase text-white/40 hover:text-white/80 transition-colors">Contact</a>
+      <a href={`${BASE}boutique`}   class="text-[10px] tracking-[0.2em] uppercase text-[#d4af37] border border-[#d4af37]/40 px-4 py-2 hover:bg-[#d4af37]/10 transition-colors">Boutique</a>
     </div>
-    <a href="/#contact" class="text-[9px] tracking-[0.25em] uppercase bg-white/5 text-white/60 px-4 py-2 hover:bg-white/10 border border-white/10 transition-colors">Devis</a>
+    <div class="flex items-center gap-3">
+      <a href={`${BASE}#contact`} class="hidden md:block text-[9px] tracking-[0.25em] uppercase bg-white/5 text-white/60 px-4 py-2 hover:bg-white/10 border border-white/10 transition-colors">Devis</a>
+      <!-- Mobile menu button -->
+      <button id="nav-toggle" class="md:hidden text-white/60 hover:text-white w-8 h-8 flex items-center justify-center" aria-label="Menu">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+    </div>
+  </div>
+  <!-- Mobile dropdown -->
+  <div id="mobile-menu" class="absolute top-20 left-0 right-0 bg-[#0d0d0d] border-b border-white/5 flex-col px-6 py-4 gap-4 md:hidden">
+    <a href={`${BASE}#expertise`} class="text-[10px] tracking-[0.2em] uppercase text-white/40 py-2">Expertise</a>
+    <a href={`${BASE}#b2b`}       class="text-[10px] tracking-[0.2em] uppercase text-white/40 py-2">B2B</a>
+    <a href={`${BASE}#contact`}   class="text-[10px] tracking-[0.2em] uppercase text-white/40 py-2">Contact</a>
+    <a href={`${BASE}boutique`}   class="text-[10px] tracking-[0.2em] uppercase text-[#d4af37] py-2">Boutique</a>
+    <a href={`${BASE}#contact`}   class="text-[9px] tracking-[0.25em] uppercase text-white/60 py-2">Devis personnalisé</a>
   </div>
 </nav>
 
@@ -55,11 +83,11 @@ import "../styles/site.css";
   <!-- CATEGORY FILTERS -->
   <div class="sticky top-20 z-40 bg-[#0d0d0d]/97 backdrop-blur-md border-b border-white/5 py-4 px-4">
     <div class="max-w-7xl mx-auto flex gap-2 overflow-x-auto scrollbar-hide pb-1">
-      <button data-cat="all"      class="filter-btn active px-5 py-2 text-[9px] tracking-[0.2em] uppercase border whitespace-nowrap transition-all cursor-pointer border-[#d4af37] text-[#d4af37]">Tout (24)</button>
-      <button data-cat="pets"     class="filter-btn px-5 py-2 text-[9px] tracking-[0.2em] uppercase border whitespace-nowrap transition-all cursor-pointer border-white/15 text-white/35 hover:border-[#d4af37] hover:text-[#d4af37]">🐾 Mascotas (6)</button>
-      <button data-cat="baby"     class="filter-btn px-5 py-2 text-[9px] tracking-[0.2em] uppercase border whitespace-nowrap transition-all cursor-pointer border-white/15 text-white/35 hover:border-[#d4af37] hover:text-[#d4af37]">👶 Baby Shower (6)</button>
-      <button data-cat="memories" class="filter-btn px-5 py-2 text-[9px] tracking-[0.2em] uppercase border whitespace-nowrap transition-all cursor-pointer border-white/15 text-white/35 hover:border-[#d4af37] hover:text-[#d4af37]">💛 Mémorias (6)</button>
-      <button data-cat="custom"   class="filter-btn px-5 py-2 text-[9px] tracking-[0.2em] uppercase border whitespace-nowrap transition-all cursor-pointer border-white/15 text-white/35 hover:border-[#d4af37] hover:text-[#d4af37]">✨ Personnalisation (6)</button>
+      <button data-cat="all"      class="filter-btn active px-5 py-2 text-[9px] tracking-[0.2em] uppercase border whitespace-nowrap transition-all cursor-pointer border-[#d4af37] text-[#d4af37]">Tout</button>
+      <button data-cat="pets"     class="filter-btn px-5 py-2 text-[9px] tracking-[0.2em] uppercase border whitespace-nowrap transition-all cursor-pointer border-white/15 text-white/35 hover:border-[#d4af37] hover:text-[#d4af37]">🐾 Mascotas</button>
+      <button data-cat="baby"     class="filter-btn px-5 py-2 text-[9px] tracking-[0.2em] uppercase border whitespace-nowrap transition-all cursor-pointer border-white/15 text-white/35 hover:border-[#d4af37] hover:text-[#d4af37]">👶 Baby Shower</button>
+      <button data-cat="memories" class="filter-btn px-5 py-2 text-[9px] tracking-[0.2em] uppercase border whitespace-nowrap transition-all cursor-pointer border-white/15 text-white/35 hover:border-[#d4af37] hover:text-[#d4af37]">💛 Mémorias</button>
+      <button data-cat="custom"   class="filter-btn px-5 py-2 text-[9px] tracking-[0.2em] uppercase border whitespace-nowrap transition-all cursor-pointer border-white/15 text-white/35 hover:border-[#d4af37] hover:text-[#d4af37]">✨ Personnalisation</button>
     </div>
   </div>
 
@@ -67,9 +95,11 @@ import "../styles/site.css";
   <div class="max-w-7xl mx-auto px-4 mt-10 pb-36">
     <p id="product-count" class="text-[#333] text-[9px] tracking-widest uppercase mb-6 px-2"></p>
     <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-      <div class="col-span-full flex justify-center py-24">
-        <div class="w-8 h-8 border-2 border-[#d4af37]/20 border-t-[#d4af37] rounded-full animate-spin"></div>
-      </div>
+      <!-- Skeleton loaders -->
+      <div class="skeleton border border-[#1e1e1e] h-80 rounded-none"></div>
+      <div class="skeleton border border-[#1e1e1e] h-80 rounded-none"></div>
+      <div class="skeleton border border-[#1e1e1e] h-80 rounded-none"></div>
+      <div class="skeleton border border-[#1e1e1e] h-80 rounded-none"></div>
     </div>
   </div>
 </main>
@@ -96,6 +126,12 @@ import "../styles/site.css";
       <span class="text-[#444] text-[9px] tracking-widest uppercase">Total</span>
       <span id="cart-total" class="text-[#d4af37] text-xl font-light">€0.00</span>
     </div>
+    <!-- WhatsApp quick order -->
+    <a id="whatsapp-btn" href="#" target="_blank" rel="noopener"
+      class="flex items-center justify-center gap-2 w-full border border-[#25d366]/30 text-[#25d366] text-[9px] tracking-[0.2em] uppercase py-3 hover:bg-[#25d366]/10 transition-colors">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Commander via WhatsApp
+    </a>
     <button id="checkout-btn" class="w-full bg-[#d4af37] text-black text-[10px] tracking-[0.25em] uppercase font-medium py-4 hover:bg-[#e8c84a] transition-colors active:scale-[.98]">
       Passer commande
     </button>
@@ -108,9 +144,33 @@ import "../styles/site.css";
   <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
     <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
   </svg>
-  <span id="cart-badge" style="display:none" class="absolute -top-1 -right-1 min-w-[20px] h-5 bg-black text-[#d4af37] text-[9px] font-bold rounded-full items-center justify-center px-1">0</span>
+  <span id="cart-badge" style="display:none" class="absolute -top-1 -right-1 min-w-[20px] h-5 bg-black text-[#d4af37] text-[9px] font-bold rounded-full flex items-center justify-center px-1">0</span>
 </button>
 
+<!-- PRODUCT DETAIL MODAL -->
+<div id="detail-modal" style="display:none"
+  class="fixed inset-0 bg-black/90 z-[60] items-center justify-center p-4 backdrop-blur-md overflow-y-auto">
+  <div class="bg-[#0f0f0f] border border-white/10 w-full max-w-2xl relative my-4 flex flex-col md:flex-row overflow-hidden">
+    <button id="detail-close" class="absolute top-4 right-4 z-10 text-[#444] hover:text-white text-2xl w-8 h-8 flex items-center justify-center leading-none">&times;</button>
+    <div class="md:w-1/2 aspect-square bg-[#1a1a1a] flex-shrink-0">
+      <img id="detail-img" src="" alt="" class="w-full h-full object-cover">
+    </div>
+    <div class="p-6 flex flex-col gap-4 flex-1">
+      <span id="detail-cat" class="text-[#d4af37]/50 text-[8px] tracking-[0.2em] uppercase"></span>
+      <h3 id="detail-name" class="text-white text-xl font-light leading-snug"></h3>
+      <p id="detail-desc" class="text-[#555] text-sm leading-relaxed flex-1"></p>
+      <div class="text-[#333] text-[9px] tracking-widest uppercase">
+        Machine: <span id="detail-machine" class="text-[#555]"></span>
+      </div>
+      <div class="flex items-center justify-between pt-2 border-t border-white/5">
+        <span id="detail-price" class="text-[#d4af37] text-2xl font-light"></span>
+        <button id="detail-add-btn" class="bg-[#d4af37] text-black text-[9px] tracking-[0.2em] uppercase font-medium px-6 py-3 hover:bg-[#e8c84a] transition-colors" data-id="">
+          + Ajouter au panier
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- CHECKOUT MODAL -->
 <div id="checkout-modal" style="display:none"
@@ -151,6 +211,7 @@ import "../styles/site.css";
     <div id="order-success" class="hidden text-center py-10">
       <div class="text-5xl mb-5 text-[#d4af37]">✓</div>
       <h3 class="text-white text-xl font-light mb-3">Commande envoyée !</h3>
+      <p id="order-id-display" class="text-[#d4af37]/60 text-[9px] tracking-widest uppercase mb-3"></p>
       <p class="text-[#555] text-sm leading-relaxed mb-6">Nous vous contacterons sous 24h pour confirmer votre commande et discuter des détails de personnalisation.</p>
       <button id="success-close" class="text-[#d4af37] text-[9px] tracking-widest uppercase underline underline-offset-4">Continuer les achats</button>
     </div>
@@ -159,108 +220,135 @@ import "../styles/site.css";
 
 
 <script is:inline>
-// ── CONFIG ── Rellena estos IDs después del setup de Google Sheets
-const SHEET_ID = '18mf6jI5IfMO6lirZZOL3xUB_EstHDNodyz-BPjz85_4';          // Google Sheet ID (vacío = productos hardcoded)
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxbn0qlCwDchQ4GPyUNUKjPYNCO9OdpQHwrCeJuDYOJIYBY2yTYVk-KFkvQCA0IuEsl8g/exec';   // URL del Google Apps Script (para guardar pedidos)
+// ── CONFIG ──────────────────────────────────────────────────────────────────
+const SHEET_ID = '18mf6jI5IfMO6lirZZOL3xUB_EstHDNodyz-BPjz85_4';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxbn0qlCwDchQ4GPyUNUKjPYNCO9OdpQHwrCeJuDYOJIYBY2yTYVk-KFkvQCA0IuEsl8g/exec';
+const WHATSAPP_NUMBER = '352691000000'; // ← actualizar con número real
 
-// ── CATÁLOGO ── 24 productos · 4 nichos · 6 por nicho
+// ── CATÁLOGO FALLBACK ────────────────────────────────────────────────────────
 const CATALOGUE = [
-  // 🐾 MASCOTAS
   {id:'m1',cat:'pets',name:'Bandana brodée personnalisée',price:22,machine:'Bordadora',
-   img:'https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=500&q=80&fit=crop',
-   desc:'Bandana 100% coton avec le prénom de votre animal. 3 tailles. Fil premium.'},
+   img:'https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=600&q=80&fit=crop',
+   desc:'Bandana 100% coton avec le prénom de votre animal. 3 tailles. Fil premium lavable.'},
   {id:'m2',cat:'pets',name:'Chapa de nombre grabada laser',price:15,machine:'Láser',
-   img:'https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=500&q=80&fit=crop',
+   img:'https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=600&q=80&fit=crop',
    desc:'Médaille inox. Nom + numéro gravés laser. Double face. Résistante à l\'eau.'},
-  {id:'m3',cat:'pets',name:'Tasse photo mascota personnalisée',price:24,machine:'Sublimación',
-   img:'https://images.unsplash.com/photo-1544568100-847a948585b9?w=500&q=80&fit=crop',
+  {id:'m3',cat:'pets',name:'Tasse photo mascota',price:24,machine:'Sublimación',
+   img:'https://images.unsplash.com/photo-1544568100-847a948585b9?w=600&q=80&fit=crop',
    desc:'Tasse céramique 330ml HD avec photo de votre animal. Couleurs durables.'},
   {id:'m4',cat:'pets',name:'Porte-clés gravé nom animal',price:13,machine:'Láser',
-   img:'https://images.unsplash.com/photo-1583337130417-3346a1be7dee?w=500&q=80&fit=crop',
+   img:'https://images.unsplash.com/photo-1583337130417-3346a1be7dee?w=600&q=80&fit=crop',
    desc:'Bois massif ou acrylique. Prénom + silhouette gravés laser.'},
-  {id:'m5',cat:'pets',name:'Portrait animal gravure laser A4',price:38,machine:'Láser',
-   img:'https://images.unsplash.com/photo-1574158622682-e40e69881006?w=500&q=80&fit=crop',
+  {id:'m5',cat:'pets',name:'Portrait animal laser A4',price:38,machine:'Láser',
+   img:'https://images.unsplash.com/photo-1574158622682-e40e69881006?w=600&q=80&fit=crop',
    desc:'Portrait artistique 21×30cm gravé sur bois. Cadre noir inclus.'},
   {id:'m6',cat:'pets',name:'Gorra bordada personalizada',price:29,machine:'Bordadora',
-   img:'https://images.unsplash.com/photo-1521369909029-2afed882baee?w=500&q=80&fit=crop',
-   desc:"Casquette premium brodée 'Dog Mom' / 'Cat Dad' ou texte custom. Taille unique."},
-  // 👶 BABY SHOWER
+   img:'https://images.unsplash.com/photo-1521369909029-2afed882baee?w=600&q=80&fit=crop',
+   desc:"Casquette premium brodée 'Dog Mom' / 'Cat Dad' ou texte custom."},
   {id:'b1',cat:'baby',name:'Pack naissance complet',price:65,machine:'Bordadora + Láser',
-   img:'https://images.unsplash.com/photo-1519340241574-2cec6aef0c01?w=500&q=80&fit=crop',
+   img:'https://images.unsplash.com/photo-1519340241574-2cec6aef0c01?w=600&q=80&fit=crop',
    desc:'Babero bordado + gorro tricoté + porte-clés gravé. Tout personnalisé prénom + date.'},
   {id:'b2',cat:'baby',name:'Bonnet tricoté prénom',price:28,machine:'Tejido circular',
-   img:'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=500&q=80&fit=crop',
+   img:'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=600&q=80&fit=crop',
    desc:'100% laine mérinos. Prénom brodé. 5 coloris. Naissance à 6 mois.'},
   {id:'b3',cat:'baby',name:'Babero bordado con nombre',price:25,machine:'Bordadora',
-   img:'https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=500&q=80&fit=crop',
+   img:'https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=600&q=80&fit=crop',
    desc:'Coton bio. Prénom au fil coloré. Lavable en machine.'},
   {id:'b4',cat:'baby',name:'Letrero habitación bebé',price:48,machine:'Láser/CNC',
-   img:'https://images.unsplash.com/photo-1555252333-9f8e92e65df9?w=500&q=80&fit=crop',
+   img:'https://images.unsplash.com/photo-1555252333-9f8e92e65df9?w=600&q=80&fit=crop',
    desc:'Plaque bois 30×15cm. Prénom gravé. Formes: nuage, étoile, arc-en-ciel.'},
-  {id:'b5',cat:'baby',name:'Tasse "Bonne Maman"',price:24,machine:'Sublimación',
-   img:'https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?w=500&q=80&fit=crop',
-   desc:'Tasse 330ml. Prénom du bébé + date de naissance. Pour la nouvelle maman.'},
+  {id:'b5',cat:'baby',name:'Tasse Bonne Maman',price:24,machine:'Sublimación',
+   img:'https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?w=600&q=80&fit=crop',
+   desc:'Tasse 330ml. Prénom du bébé + date de naissance.'},
   {id:'b6',cat:'baby',name:'Set stickers bienvenida bebé',price:16,machine:'Cortadora',
-   img:'https://images.unsplash.com/photo-1604147706283-d7119b5b822c?w=500&q=80&fit=crop',
-   desc:'12 stickers vinyle A4: prénom, date, étoiles, cœurs. Parfaits pour décorer.'},
-  // 💛 MÉMORIAS
+   img:'https://images.unsplash.com/photo-1604147706283-d7119b5b822c?w=600&q=80&fit=crop',
+   desc:'12 stickers vinyle A4: prénom, date, étoiles, cœurs.'},
   {id:'r1',cat:'memories',name:'Plaque receta de la abuela',price:65,machine:'Láser',
-   img:'https://images.unsplash.com/photo-1466637574441-749b8f19452f?w=500&q=80&fit=crop',
+   img:'https://images.unsplash.com/photo-1466637574441-749b8f19452f?w=600&q=80&fit=crop',
    desc:'Planche bois 30×20cm. Recette familiale gravée laser. Cadeau éternel.'},
   {id:'r2',cat:'memories',name:'Tabla cocina con dedicatoria',price:48,machine:'Láser',
-   img:'https://images.unsplash.com/photo-1585238342134-b80e55a5e0b2?w=500&q=80&fit=crop',
-   desc:'Planche à découper bois massif avec dédicace gravée. Cadeau de mariage parfait.'},
+   img:'https://images.unsplash.com/photo-1585238342134-b80e55a5e0b2?w=600&q=80&fit=crop',
+   desc:'Planche à découper bois massif avec dédicace gravée.'},
   {id:'r3',cat:'memories',name:'Cojín bordado personalizado',price:55,machine:'Bordadora',
-   img:'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=500&q=80&fit=crop',
+   img:'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&q=80&fit=crop',
    desc:'Coussin 45×45cm. Citation ou texte brodé en fil doré. Housse lavable.'},
   {id:'r4',cat:'memories',name:'Marco foto con texto grabado',price:42,machine:'Láser',
-   img:'https://images.unsplash.com/photo-1416339306562-f3d12fefd36f?w=500&q=80&fit=crop',
+   img:'https://images.unsplash.com/photo-1416339306562-f3d12fefd36f?w=600&q=80&fit=crop',
    desc:'Cadre bois 20×25cm. Message gravé laser. Votre photo + votre texte.'},
   {id:'r5',cat:'memories',name:'Álbum aniversario grabado',price:75,machine:'Láser',
-   img:'https://images.unsplash.com/photo-1518568814500-bf0f8d125f46?w=500&q=80&fit=crop',
+   img:'https://images.unsplash.com/photo-1518568814500-bf0f8d125f46?w=600&q=80&fit=crop',
    desc:'Album 30×30cm couverture bois gravée. Noms + date. 20 pages papier premium.'},
   {id:'r6',cat:'memories',name:'Plaque souvenir Luxembourg',price:38,machine:'Láser',
-   img:'https://images.unsplash.com/photo-1590677197960-4a85a80cdd67?w=500&q=80&fit=crop',
+   img:'https://images.unsplash.com/photo-1590677197960-4a85a80cdd67?w=600&q=80&fit=crop',
    desc:'Plaque bois/acrylique 15×10cm. Carte du Luxembourg + texte personnalisé.'},
-  // ✨ PERSONNALISATION
   {id:'c1',cat:'custom',name:'Casquette brodée logo',price:29,machine:'Bordadora',
-   img:'https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=500&q=80&fit=crop',
-   desc:'Casquette 5 panneaux. Logo ou texte brodé haute précision. Équipes & événements.'},
-  {id:'c2',cat:'custom',name:'Stickers vinilo empresa A4',price:16,machine:'Cortadora',
-   img:'https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=500&q=80&fit=crop',
+   img:'https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=600&q=80&fit=crop',
+   desc:'Casquette 5 panneaux. Logo ou texte brodé haute précision.'},
+  {id:'c2',cat:'custom',name:'Stickers vinilo empresa',price:16,machine:'Cortadora',
+   img:'https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=600&q=80&fit=crop',
    desc:'Stickers à votre logo découpés avec précision. Vinyle waterproof extérieur.'},
   {id:'c3',cat:'custom',name:'Kit corporatif x5',price:125,machine:'Bordadora + Sublimación',
-   img:'https://images.unsplash.com/photo-1497366216548-37526070297c?w=500&q=80&fit=crop',
-   desc:'5 pièces assorties: casquette + tasse + porte-clés. Votre logo. Team building.'},
+   img:'https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&q=80&fit=crop',
+   desc:'5 pièces assorties: casquette + tasse + porte-clés. Team building.'},
   {id:'c4',cat:'custom',name:'Vinilo decorativo vitrine',price:35,machine:'Cortadora',
-   img:'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=500&q=80&fit=crop',
-   desc:'Vinyle découpé à vos dimensions avec votre logo. Pose simple, résultat pro.'},
+   img:'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=600&q=80&fit=crop',
+   desc:'Vinyle découpé à vos dimensions avec votre logo.'},
   {id:'c5',cat:'custom',name:'Tarjetas die-cut personalizadas',price:20,machine:'Cortadora',
-   img:'https://images.unsplash.com/photo-1607344645866-009c320b63e0?w=500&q=80&fit=crop',
+   img:'https://images.unsplash.com/photo-1607344645866-009c320b63e0?w=600&q=80&fit=crop',
    desc:'50 cartes découpées à votre forme de logo. Impression laser premium.'},
   {id:'c6',cat:'custom',name:'Termo grabado nombre + logo',price:38,machine:'Láser',
-   img:'https://images.unsplash.com/photo-1535025639604-9a804c092faa?w=500&q=80&fit=crop',
+   img:'https://images.unsplash.com/photo-1535025639604-9a804c092faa?w=600&q=80&fit=crop',
    desc:'Thermos inox 500ml avec nom ou logo gravé laser. Cadeau entreprise premium.'},
 ];
 
 const CAT_LABELS = {all:'Tout',pets:'🐾 Mascotas',baby:'👶 Baby Shower',memories:'💛 Mémorias',custom:'✨ Personnalisation'};
-let products = [], cart = JSON.parse(localStorage.getItem('ap-cart')||'[]'), activeFilter = 'all';
+let products = [], cart = [], activeFilter = 'all';
 
-// ── LOAD PRODUCTS (Google Sheets fallback to hardcoded) ──────────────────────
+try { cart = JSON.parse(localStorage.getItem('ap-cart')||'[]'); } catch {}
+
+// ── TOAST ────────────────────────────────────────────────────────────────────
+let toastTimer;
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  document.getElementById('toast-msg').textContent = msg;
+  el.classList.remove('hidden');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.add('hidden'), 2200);
+}
+
+// ── LOAD PRODUCTS ────────────────────────────────────────────────────────────
 async function loadProducts() {
   if (SHEET_ID) {
     try {
-      const r = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=Products`);
+      const r = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=Products&timestamp=${Date.now()}`);
       const t = await r.text();
       const j = JSON.parse(t.replace(/^[^{]+/, '').replace(/\);?\s*$/, ''));
-      products = j.table.rows.map((row, i) => ({
-        id: row.c[0]?.v || `s${i}`, name: row.c[1]?.v || '',
-        cat: row.c[2]?.v || 'custom', price: parseFloat(row.c[3]?.v) || 0,
-        img: row.c[4]?.v || '', desc: row.c[5]?.v || '', machine: row.c[6]?.v || '',
-      }));
-    } catch { products = CATALOGUE; }
+      const rows = j.table.rows;
+      if (rows && rows.length > 0) {
+        products = rows.map((row, i) => ({
+          id: row.c[0]?.v || `s${i}`,
+          name: row.c[1]?.v || '',
+          cat: row.c[2]?.v || 'custom',
+          price: parseFloat(row.c[3]?.v) || 0,
+          img: (row.c[4]?.v || '') + (row.c[4]?.v && !row.c[4].v.includes('?') ? '?w=600&q=80&fit=crop' : ''),
+          desc: row.c[5]?.v || '',
+          machine: row.c[6]?.v || '',
+        }));
+      } else { products = CATALOGUE; }
+    } catch (e) { products = CATALOGUE; }
   } else { products = CATALOGUE; }
+  updateFilterCounts();
   renderGrid();
+}
+
+// ── UPDATE FILTER BUTTON COUNTS ──────────────────────────────────────────────
+function updateFilterCounts() {
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    const cat = btn.dataset.cat;
+    const count = cat === 'all' ? products.length : products.filter(p => p.cat === cat).length;
+    const label = CAT_LABELS[cat] || cat;
+    btn.textContent = `${label} (${count})`;
+  });
 }
 
 // ── RENDER GRID ──────────────────────────────────────────────────────────────
@@ -273,11 +361,11 @@ function renderGrid() {
     return;
   }
   grid.innerHTML = list.map(p => `
-    <article class="border border-[#1e1e1e] hover:border-[#d4af37]/25 transition-all duration-300 bg-[#111] overflow-hidden group">
+    <article class="border border-[#1e1e1e] hover:border-[#d4af37]/25 transition-all duration-300 bg-[#111] overflow-hidden group cursor-pointer" data-id="${p.id}">
       <div class="aspect-[4/3] overflow-hidden bg-[#1a1a1a]">
         <img src="${p.img}" alt="${p.name}" loading="lazy"
           class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-          onerror="this.src='https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=500'">
+          onerror="this.src='https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=60'">
       </div>
       <div class="p-4">
         <span class="text-[#d4af37]/50 text-[8px] tracking-[0.2em] uppercase block mb-1">${CAT_LABELS[p.cat]||p.cat}</span>
@@ -289,26 +377,63 @@ function renderGrid() {
         </div>
       </div>
     </article>`).join('');
-  grid.querySelectorAll('.add-btn').forEach(b => b.addEventListener('click', () => addToCart(b.dataset.id)));
+
+  // Article click → detail modal
+  grid.querySelectorAll('article').forEach(a => a.addEventListener('click', e => {
+    if (e.target.classList.contains('add-btn')) return;
+    openDetail(a.dataset.id);
+  }));
+  grid.querySelectorAll('.add-btn').forEach(b => b.addEventListener('click', e => {
+    e.stopPropagation();
+    addToCart(b.dataset.id, b);
+  }));
 }
 
+// ── DETAIL MODAL ─────────────────────────────────────────────────────────────
+function openDetail(id) {
+  const p = products.find(x => x.id === id); if (!p) return;
+  document.getElementById('detail-img').src = p.img;
+  document.getElementById('detail-img').alt = p.name;
+  document.getElementById('detail-cat').textContent = CAT_LABELS[p.cat] || p.cat;
+  document.getElementById('detail-name').textContent = p.name;
+  document.getElementById('detail-desc').textContent = p.desc;
+  document.getElementById('detail-machine').textContent = p.machine;
+  document.getElementById('detail-price').textContent = `€${p.price}`;
+  document.getElementById('detail-add-btn').dataset.id = p.id;
+  const m = document.getElementById('detail-modal'); m.style.display = 'flex';
+}
+document.getElementById('detail-close').addEventListener('click', () => {
+  document.getElementById('detail-modal').style.display = 'none';
+});
+document.getElementById('detail-add-btn').addEventListener('click', function() {
+  addToCart(this.dataset.id);
+  document.getElementById('detail-modal').style.display = 'none';
+});
 
 // ── CART ─────────────────────────────────────────────────────────────────────
-function addToCart(id) {
+function addToCart(id, btn) {
   const p = products.find(x => x.id === id); if (!p) return;
   const ex = cart.find(x => x.id === id);
-  if (ex) ex.qty++; else cart.push({id:p.id, name:p.name, price:p.price, img:p.img, qty:1});
-  saveCart(); renderCart(); openDrawer();
-  const b = document.querySelector(`.add-btn[data-id="${id}"]`);
-  if (b) {
-    b.textContent = '✓ Ajouté'; b.style.cssText = 'border-color:#d4af37;color:#d4af37';
-    setTimeout(() => { b.textContent = '+ Ajouter'; b.style.cssText = ''; }, 1800);
+  if (ex) ex.qty++;
+  else cart.push({id:p.id, name:p.name, price:p.price, img:p.img, qty:1});
+  saveCart(); renderCart();
+  showToast(`✓ ${p.name.split(' ').slice(0,3).join(' ')} ajouté`);
+  if (btn) {
+    const orig = btn.textContent;
+    btn.textContent = '✓'; btn.style.cssText = 'border-color:#d4af37;color:#d4af37';
+    setTimeout(() => { btn.textContent = orig; btn.style.cssText = ''; }, 1500);
   }
   const t = document.getElementById('cart-toggle');
   t.classList.add('pulse'); setTimeout(() => t.classList.remove('pulse'), 700);
 }
+function changeQty(id, delta) {
+  const item = cart.find(x => x.id === id); if (!item) return;
+  item.qty += delta;
+  if (item.qty <= 0) cart = cart.filter(x => x.id !== id);
+  saveCart(); renderCart();
+}
 function removeFromCart(id) { cart = cart.filter(x => x.id !== id); saveCart(); renderCart(); }
-function saveCart() { localStorage.setItem('ap-cart', JSON.stringify(cart)); }
+function saveCart() { try { localStorage.setItem('ap-cart', JSON.stringify(cart)); } catch {} }
 function renderCart() {
   const total = cart.reduce((s,i) => s + i.price * i.qty, 0);
   const count = cart.reduce((s,i) => s + i.qty, 0);
@@ -316,19 +441,36 @@ function renderCart() {
   document.getElementById('cart-label').textContent = `${count} article${count!==1?'s':''}`;
   const badge = document.getElementById('cart-badge');
   badge.textContent = count; badge.style.display = count ? 'flex' : 'none';
+
+  // WhatsApp link
+  const waText = encodeURIComponent(
+    '🛍️ *Commande Atelier Prestige*\n\n' +
+    cart.map(i => `• ${i.name} ×${i.qty} — €${(i.price*i.qty).toFixed(2)}`).join('\n') +
+    `\n\n*Total: €${total.toFixed(2)}*\n\nMerci de confirmer ma commande!`
+  );
+  document.getElementById('whatsapp-btn').href = `https://wa.me/${WHATSAPP_NUMBER}?text=${waText}`;
+
   const el = document.getElementById('cart-items');
-  if (!cart.length) { el.innerHTML = '<p class="text-[#333] text-center text-sm py-16">Votre panier est vide.</p>'; return; }
+  if (!cart.length) {
+    el.innerHTML = '<p class="text-[#333] text-center text-sm py-16">Votre panier est vide.</p>';
+    return;
+  }
   el.innerHTML = cart.map(i => `
     <div class="flex gap-3 pb-4 border-b border-[#1e1e1e] last:border-0 last:pb-0">
-      <img src="${i.img}" alt="${i.name}" class="w-16 h-16 object-cover bg-[#1a1a1a] flex-shrink-0"
-        onerror="this.src='https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=100'">
+      <img src="${i.img}" alt="${i.name}" class="w-16 h-16 object-cover bg-[#1a1a1a] flex-shrink-0 cursor-pointer"
+        onerror="this.src='https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=100'"
+        onclick="openDetail('${i.id}')">
       <div class="flex-1 min-w-0">
-        <p class="text-white text-xs leading-snug mb-1 line-clamp-2">${i.name}</p>
-        <p class="text-[#d4af37] text-sm">€${i.price} <span class="text-[#444]">×${i.qty}</span></p>
+        <p class="text-white text-xs leading-snug mb-2 line-clamp-2">${i.name}</p>
+        <div class="flex items-center gap-2">
+          <button class="qty-btn" onclick="changeQty('${i.id}',-1)">−</button>
+          <span class="text-[#666] text-xs w-5 text-center">${i.qty}</span>
+          <button class="qty-btn" onclick="changeQty('${i.id}',1)">+</button>
+          <span class="text-[#d4af37] text-sm ml-2">€${(i.price*i.qty).toFixed(2)}</span>
+        </div>
       </div>
-      <button class="rm text-[#333] hover:text-red-400 transition-colors text-xl w-7 h-7 flex items-center justify-center flex-shrink-0 leading-none" data-id="${i.id}">&times;</button>
+      <button class="rm text-[#333] hover:text-red-400 transition-colors text-xl w-7 h-7 flex items-center justify-center flex-shrink-0 leading-none" onclick="removeFromCart('${i.id}')">&times;</button>
     </div>`).join('');
-  el.querySelectorAll('.rm').forEach(b => b.addEventListener('click', () => removeFromCart(b.dataset.id)));
 }
 
 // ── UI ────────────────────────────────────────────────────────────────────────
@@ -345,15 +487,34 @@ function closeDrawer() {
 
 document.getElementById('cart-toggle').addEventListener('click', openDrawer);
 document.getElementById('cart-close').addEventListener('click', closeDrawer);
-document.getElementById('cart-overlay').addEventListener('click', closeDrawer);
+document.getElementById('cart-overlay').addEventListener('click', () => {
+  closeDrawer();
+  document.getElementById('detail-modal').style.display = 'none';
+});
 
+// Mobile nav
+document.getElementById('nav-toggle').addEventListener('click', () => {
+  document.getElementById('mobile-menu').classList.toggle('open');
+});
+
+// Filter buttons
 document.querySelectorAll('.filter-btn').forEach(btn => btn.addEventListener('click', () => {
   document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active'); activeFilter = btn.dataset.cat; renderGrid();
 }));
 
+// Escape key closes modals
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    closeDrawer();
+    document.getElementById('detail-modal').style.display = 'none';
+    document.getElementById('checkout-modal').style.display = 'none';
+  }
+});
+
 // ── CHECKOUT ──────────────────────────────────────────────────────────────────
 document.getElementById('checkout-btn').addEventListener('click', () => {
+  if (!cart.length) { showToast('Votre panier est vide.'); return; }
   closeDrawer();
   const total = cart.reduce((s,i) => s+i.price*i.qty, 0);
   document.getElementById('order-summary').innerHTML =
@@ -367,21 +528,28 @@ document.getElementById('checkout-close').addEventListener('click', () => {
 
 document.getElementById('order-form').addEventListener('submit', async e => {
   e.preventDefault();
-  const btn = document.getElementById('submit-btn'); btn.textContent = 'Envoi…'; btn.disabled = true;
+  const btn = document.getElementById('submit-btn');
+  btn.textContent = 'Envoi en cours…'; btn.disabled = true;
   const fd = new FormData(e.target);
+  const orderId = 'AP-' + Date.now().toString(36).toUpperCase();
   const order = {
-    order_id: 'AP-' + Date.now().toString(36).toUpperCase(),
+    order_id: orderId,
     timestamp: new Date().toISOString(),
     name: fd.get('name'), email: fd.get('email'),
-    phone: fd.get('phone'), notes: fd.get('notes'),
-    items: JSON.stringify(cart.map(i => `${i.name} x${i.qty} €${i.price}`)),
+    phone: fd.get('phone')||'', notes: fd.get('notes')||'',
+    items: JSON.stringify(cart.map(i => `${i.name} x${i.qty} @€${i.price}`)),
     total: cart.reduce((s,i) => s+i.price*i.qty, 0).toFixed(2)
   };
   if (APPS_SCRIPT_URL) {
     try {
-      await fetch(APPS_SCRIPT_URL, {method:'POST', body:JSON.stringify(order), mode:'no-cors', headers:{'Content-Type':'application/json'}});
+      await fetch(APPS_SCRIPT_URL, {
+        method:'POST', mode:'no-cors',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify(order)
+      });
     } catch {}
   }
+  document.getElementById('order-id-display').textContent = `Réf: ${orderId}`;
   document.getElementById('order-form').classList.add('hidden');
   document.getElementById('order-success').classList.remove('hidden');
   cart = []; saveCart(); renderCart();
@@ -392,11 +560,13 @@ document.getElementById('success-close').addEventListener('click', () => {
   document.getElementById('order-form').classList.remove('hidden');
   document.getElementById('order-success').classList.add('hidden');
   document.getElementById('order-form').reset();
-  const btn = document.getElementById('submit-btn'); btn.textContent = 'Envoyer la commande'; btn.disabled = false;
+  const btn = document.getElementById('submit-btn');
+  btn.textContent = 'Envoyer la commande'; btn.disabled = false;
 });
 
 // ── INIT ──────────────────────────────────────────────────────────────────────
-renderCart(); loadProducts();
+renderCart();
+loadProducts();
 </script>
 
 </Layout>
