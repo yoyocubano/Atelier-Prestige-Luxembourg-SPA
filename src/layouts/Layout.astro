@@ -6,10 +6,13 @@ interface Props {
 	lang?: string;
 }
 
+const BASE = import.meta.env.BASE_URL;
+const SITE = 'https://yoyocubano.github.io/Atelier-Prestige-Luxembourg-SPA';
+
 const { 
 	title, 
 	description = "Atelier Prestige Luxembourg. Artisanat numérique, cadeaux corporatifs et personnalisation de luxe.",
-	image = "https://cosmopolita-app-1234--atelier-spa.web.app/assets/15881da53d29331ca996485b056684b3.webp",
+	image = `${SITE}/assets/15881da53d29331ca996485b056684b3.webp`,
 	lang = "fr"
 } = Astro.props;
 ---
@@ -19,7 +22,7 @@ const {
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="icon" type="image/svg+xml" href={`${BASE}favicon.svg`} />
 		<meta name="generator" content={Astro.generator} />
 		
 		<!-- Primary Meta Tags -->
@@ -28,16 +31,15 @@ const {
 		<meta name="description" content={description} />
 
 		<!-- Open Graph / Facebook -->
-		<meta property="fb:app_id" content="1234567890" />
 		<meta property="og:type" content="website" />
-		<meta property="og:url" content="https://cosmopolita-app-1234--atelier-spa.web.app/" />
+		<meta property="og:url" content={SITE} />
 		<meta property="og:title" content={title} />
 		<meta property="og:description" content={description} />
 		<meta property="og:image" content={image} />
 
 		<!-- Twitter -->
 		<meta property="twitter:card" content="summary_large_image" />
-		<meta property="twitter:url" content="https://cosmopolita-app-1234--atelier-spa.web.app/" />
+		<meta property="twitter:url" content={SITE} />
 		<meta property="twitter:title" content={title} />
 		<meta property="twitter:description" content={description} />
 		<meta property="twitter:image" content={image} />
